@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SL Corporation PM Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --hobis-green: #00ff33;
+  --hobis-cyan: #00f7ff;
+  --hobis-bg: #0a0a0c;
+  --hobis-panel: #111418;
+  --hobis-border: #2a3b47;
+  --hobis-alert: #ff3300;
+  --hobis-warn: #ffcc00;
+  --input-bg: #0f1215;
+  --text-meta: #8fa3b0;
+  --text-secondary: #a0c0c0;
+  --text-bright: #e0e0e0;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--hobis-bg);
+  color: var(--text-bright);
+  font-family: 'Share Tech Mono', Consolas, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--hobis-border); border-radius:2px; }
+::-webkit-scrollbar-thumb:hover { background:var(--hobis-cyan); }
+
+.container { max-width:1400px; margin:0 auto; padding:15px; }
+
+h1 {
+  font-family:'Orbitron',sans-serif;
+  font-size:1.4rem;
+  color:var(--hobis-cyan);
+  text-shadow:0 0 10px var(--hobis-cyan);
+  margin-bottom:5px;
+}
+h2 {
+  font-family:'Orbitron',sans-serif;
+  font-size:1rem;
+  color:var(--hobis-cyan);
+  margin-bottom:10px;
+}
+h3 {
+  font-family:'Orbitron',sans-serif;
+  font-size:0.85rem;
+  color:var(--hobis-green);
+  margin-bottom:8px;
+}
+
+.header {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:15px 0; border-bottom:1px dashed var(--hobis-border);
+  margin-bottom:15px;
+}
+.header-meta { color:var(--text-meta); font-size:0.8rem; }
+
+/* Tabs */
+.tabs {
+  display:flex; gap:0; margin-bottom:15px;
+  background:#15191d; border:1px solid var(--hobis-border); border-radius:4px;
+  overflow:hidden;
+}
+.tab {
+  padding:10px 20px; cursor:pointer; color:#5f7481;
+  font-family:'Orbitron',sans-serif; font-size:0.8rem;
+  transition:0.15s; border:none; background:none;
+  border-right:1px solid var(--hobis-border);
+}
+.tab:last-child { border-right:none; }
+.tab:hover { color:var(--text-secondary); background:rgba(0,247,255,0.05); }
+.tab.active {
+  color:var(--hobis-cyan); background:rgba(0,247,255,0.15);
+  box-shadow:0 0 10px rgba(0,247,255,0.1);
+}
+
+/* Panels */
+.panel {
+  background:var(--hobis-panel);
+  border:1px solid var(--hobis-border);
+  border-radius:4px;
+  padding:15px;
+  margin-bottom:15px;
+  position:relative;
+  box-shadow:inset 0 0 20px rgba(0,0,0,0.5);
+}
+.panel::before {
+  content:''; position:absolute; top:0; left:0;
+  width:10px; height:10px;
+  border-top:1px solid var(--hobis-cyan);
+  border-left:1px solid var(--hobis-cyan);
+}
+.panel::after {
+  content:''; position:absolute; bottom:0; right:0;
+  width:10px; height:10px;
+  border-bottom:1px solid var(--hobis-cyan);
+  border-right:1px solid var(--hobis-cyan);
+}
+
+/* Grid */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; }
+@media(max-width:768px) {
+  .grid-2, .grid-3 { grid-template-columns:1fr; }
+}
+
+/* Stats */
+.stat-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed rgba(42,59,71,0.5); }
+.stat-label { color:var(--text-meta); }
+.stat-value { color:var(--hobis-green); font-weight:bold; }
+.stat-value.cyan { color:var(--hobis-cyan); }
+.stat-value.warn { color:var(--hobis-warn); }
+.stat-value.alert { color:var(--hobis-alert); }
+
+/* Progress bar */
+.progress-bar {
+  height:8px; background:rgba(255,255,255,0.05);
+  border-radius:4px; overflow:hidden; margin:5px 0;
+}
+.progress-fill {
+  height:100%; border-radius:4px; transition:width 0.6s ease;
+}
+
+/* Project card */
+.project-card {
+  background:rgba(255,255,255,0.02);
+  border-left:3px solid var(--hobis-border);
+  padding:12px; margin-bottom:8px;
+  border-radius:0 4px 4px 0;
+  cursor:pointer; transition:0.15s;
+}
+.project-card:hover {
+  background:rgba(0,247,255,0.05);
+  border-left-color:var(--hobis-cyan);
+}
+.project-card.expanded .card-detail { display:block; }
+.card-header {
+  display:flex; justify-content:space-between; align-items:center;
+}
+.card-title { font-family:'Orbitron',sans-serif; font-size:0.85rem; }
+.card-badge {
+  font-size:0.7rem; padding:2px 8px;
+  border-radius:3px; background:#1a2329;
+}
+.card-detail { display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--hobis-border); }
+.card-detail table { width:100%; border-collapse:collapse; }
+.card-detail td { padding:4px 8px; font-size:0.8rem; vertical-align:top; }
+.card-detail td:first-child { color:var(--text-meta); width:120px; }
+
+/* REQ table */
+.req-table { width:100%; border-collapse:collapse; font-size:0.8rem; }
+.req-table th {
+  text-align:left; padding:6px 8px;
+  color:var(--hobis-cyan); border-bottom:1px solid var(--hobis-border);
+  font-family:'Orbitron',sans-serif; font-size:0.75rem;
+}
+.req-table td { padding:6px 8px; border-bottom:1px dashed rgba(42,59,71,0.3); }
+.req-table tr:hover { background:rgba(0,247,255,0.03); }
+
+/* Status dots */
+.status { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
+.status.green { background:var(--hobis-green); box-shadow:0 0 6px var(--hobis-green); }
+.status.yellow { background:var(--hobis-warn); box-shadow:0 0 6px var(--hobis-warn); }
+.status.red { background:var(--hobis-alert); box-shadow:0 0 6px var(--hobis-alert); }
+.status.gray { background:#5f7481; }
+
+/* Filter bar */
+.filter-bar {
+  display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;
+}
+.filter-btn {
+  padding:6px 12px; border:1px solid #3c4c56;
+  background:rgba(0,0,0,0.3); color:#8fa3b0;
+  font-family:'Share Tech Mono',monospace; font-size:0.8rem;
+  border-radius:4px; cursor:pointer; transition:0.15s;
+}
+.filter-btn:hover { border-color:var(--hobis-cyan); color:var(--text-secondary); }
+.filter-btn.active { background:rgba(0,247,255,0.15); color:var(--hobis-cyan); border-color:var(--hobis-cyan); }
+
+/* Section hide */
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+/* Diagnostic detail */
+.diag-section { margin-bottom:20px; }
+.diag-tech { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
+.diag-tag {
+  padding:3px 10px; border-radius:3px;
+  background:rgba(0,247,255,0.1); color:var(--hobis-cyan);
+  font-size:0.75rem; border:1px solid rgba(0,247,255,0.2);
+}
+.diag-feature {
+  display:flex; align-items:center; gap:8px; padding:6px 0;
+  border-bottom:1px dashed rgba(42,59,71,0.3); font-size:0.85rem;
+}
+.diag-feature .check { color:var(--hobis-green); }
+.diag-feature .pending { color:var(--hobis-warn); }
+.diag-feature .missing { color:var(--hobis-alert); }
+
+/* Collapsible */
+.collapsible-header {
+  display:flex; justify-content:space-between; align-items:center;
+  cursor:pointer; padding:8px 0;
+}
+.collapsible-header .arrow { transition:transform 0.2s; color:var(--hobis-cyan); }
+.collapsible-header.open .arrow { transform:rotate(90deg); }
+.collapsible-body { display:none; padding-top:8px; }
+.collapsible-body.open { display:block; }
+
+/* Search */
+.search-input {
+  width:100%; padding:10px;
+  background:var(--input-bg); border:1px solid #3c4c56;
+  color:var(--hobis-green); font-family:'Share Tech Mono',monospace;
+  font-size:0.9rem; border-radius:3px; margin-bottom:15px;
+}
+.search-input:focus { outline:none; border-color:var(--hobis-cyan); }
+.search-input::placeholder { color:#5f7481; }
+
+/* Context warning */
+.context-bar {
+  background:rgba(255,204,0,0.1); border:1px solid rgba(255,204,0,0.3);
+  padding:8px 15px; border-radius:4px; margin-bottom:15px;
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:0.8rem; color:var(--hobis-warn);
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>SL CORPORATION PM DASHBOARD</h1>
+      <div class="header-meta">PM.1wc | Portfolio Manager | 2026-04-11</div>
+    </div>
+    <div style="text-align:right">
+      <div class="header-meta">Projects: <span style="color:var(--hobis-green)">18</span> | Sessions: <span style="color:var(--hobis-cyan)">278+</span></div>
+      <div class="header-meta">REQ: <span style="color:var(--hobis-green)">160+</span> | ISS: <span style="color:var(--hobis-warn)">104+</span></div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('overview')">OVERVIEW</button>
+    <button class="tab" onclick="switchTab('diagnostics')">DIAGNOSTICS</button>
+    <button class="tab" onclick="switchTab('req')">REQ/ISS</button>
+    <button class="tab" onclick="switchTab('priorities')">PRIORITIES</button>
+  </div>
+
+  <!-- ===== OVERVIEW TAB ===== -->
+  <div id="tab-overview" class="tab-content active">
+    <!-- Summary Stats -->
+    <div class="grid-3">
+      <div class="panel">
+        <h3>INFRASTRUCTURE</h3>
+        <div class="stat-row"><span class="stat-label">CLAUDE.md</span><span class="stat-value">8/18</span></div>
+        <div class="stat-row"><span class="stat-label">tree_builder</span><span class="stat-value">18/18</span></div>
+        <div class="stat-row"><span class="stat-label">REQ System</span><span class="stat-value">18/18</span></div>
+        <div class="stat-row"><span class="stat-label">ISS System</span><span class="stat-value">18/18</span></div>
+      </div>
+      <div class="panel">
+        <h3>PORTFOLIO HEALTH</h3>
+        <div class="stat-row"><span class="stat-label">Active</span><span class="stat-value">10</span></div>
+        <div class="stat-row"><span class="stat-label">Standby</span><span class="stat-value cyan">4</span></div>
+        <div class="stat-row"><span class="stat-label">Dormant</span><span class="stat-value warn">4</span></div>
+        <div class="stat-row"><span class="stat-label">Stale Sessions</span><span class="stat-value">0 (cleaned)</span></div>
+      </div>
+      <div class="panel">
+        <h3>PM.1wc SESSION</h3>
+        <div class="stat-row"><span class="stat-label">Agents Dispatched</span><span class="stat-value cyan">10</span></div>
+        <div class="stat-row"><span class="stat-label">All Completed</span><span class="stat-value">10/10</span></div>
+        <div class="stat-row"><span class="stat-label">REQs Created</span><span class="stat-value">11</span></div>
+        <div class="stat-row"><span class="stat-label">REQs Completed</span><span class="stat-value">11/11</span></div>
+      </div>
+    </div>
+
+    <!-- Project List -->
+    <div class="panel">
+      <h2>PROJECT MATRIX</h2>
+      <input type="text" class="search-input" id="projectSearch" placeholder="Search projects..." oninput="filterProjects()">
+      <div class="filter-bar">
+        <button class="filter-btn active" onclick="filterTier('all',this)">ALL</button>
+        <button class="filter-btn" onclick="filterTier('T1',this)">T1 FOCUS</button>
+        <button class="filter-btn" onclick="filterTier('T2',this)">T2 MAINTAIN</button>
+        <button class="filter-btn" onclick="filterTier('T3',this)">T3 STANDBY</button>
+        <button class="filter-btn" onclick="filterTier('T4',this)">T4 DORMANT</button>
+      </div>
+      <div id="projectList"></div>
+    </div>
+  </div>
+
+  <!-- ===== DIAGNOSTICS TAB ===== -->
+  <div id="tab-diagnostics" class="tab-content">
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="switchDiag('p18',this)">P18 HIGHLINK</button>
+      <button class="filter-btn" onclick="switchDiag('p1',this)">P1 KOREAN CLASS</button>
+      <button class="filter-btn" onclick="switchDiag('p2',this)">P2 GEANT4</button>
+    </div>
+
+    <!-- P18 Diagnostic -->
+    <div id="diag-p18" class="diag-panel">
+      <div class="grid-2">
+        <div class="panel">
+          <h2>P18 HIGHLINK</h2>
+          <div class="stat-row"><span class="stat-label">Purpose</span><span class="stat-value cyan">Highway AI Surveillance</span></div>
+          <div class="stat-row"><span class="stat-label">Business</span><span class="stat-value">SL Corp Brand</span></div>
+          <div class="stat-row"><span class="stat-label">Partner</span><span class="stat-value">Friend (Sales) + jyc (Dev)</span></div>
+          <div class="stat-row"><span class="stat-label">Phase</span><span class="stat-value">Phase 1 Complete</span></div>
+          <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">4 (P18.1wc~P18.4wc)</span></div>
+          <div class="stat-row"><span class="stat-label">Git Commits</span><span class="stat-value">39</span></div>
+          <div class="diag-tech">
+            <span class="diag-tag">YOLO11-L</span>
+            <span class="diag-tag">ByteTrack</span>
+            <span class="diag-tag">Streamlit</span>
+            <span class="diag-tag">FastAPI</span>
+            <span class="diag-tag">gRPC</span>
+            <span class="diag-tag">PostgreSQL</span>
+            <span class="diag-tag">Docker</span>
+            <span class="diag-tag">RTX 4060</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>FEATURE STATUS</h2>
+          <div class="diag-feature"><span class="check">&#10003;</span> F1: Bidirectional flow detection</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> F2: Wrong-way detection (angle + temporal)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> F3: Pedestrian/motorcycle detection</div>
+          <div class="diag-feature"><span class="missing">&#10007;</span> F4: Congestion/accident (Phase 2)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> 2-stage classifier (EfficientNet-B0)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Streamlit demo UI (Mode A+C)</div>
+          <div class="diag-feature"><span class="pending">&#9679;</span> MJPEG remote streaming (CORS blocked)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> REST API + WebSocket events</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Docker Compose (GPU)</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>OPEN REQ/ISS</h2>
+        <table class="req-table">
+          <tr><th>ID</th><th>Description</th><th>Status</th><th>Priority</th></tr>
+          <tr><td>P18.4wc-REQ-001</td><td>MJPEG remote embedding resolution</td><td><span class="status yellow"></span>IN PROGRESS</td><td style="color:var(--hobis-alert)">BLOCKER</td></tr>
+          <tr><td>P18.3wc-REQ-001</td><td>F3 test execution (3 video test)</td><td><span class="status yellow"></span>IN PROGRESS</td><td>HIGH</td></tr>
+          <tr><td>P18.3wc-REQ-002</td><td>Real ITS CCTV stream integration test</td><td><span class="status red"></span>NOT STARTED</td><td>HIGH</td></tr>
+          <tr><td>P18.3wc-REQ-003</td><td>Streamlit event alert UI</td><td><span class="status red"></span>NOT STARTED</td><td>MED (blocked)</td></tr>
+          <tr><td>P18.3wc-REQ-004</td><td>Phase terminology doc</td><td><span class="status red"></span>NOT STARTED</td><td>LOW</td></tr>
+          <tr><td>P18.3wc-REQ-005</td><td>F4 implementation (congestion/accident)</td><td><span class="status red"></span>NOT STARTED</td><td>Phase 2</td></tr>
+        </table>
+        <div style="margin-top:10px">
+          <table class="req-table">
+            <tr><th>ISS ID</th><th>Description</th><th>Status</th><th>Solution</th></tr>
+            <tr><td>P18.4wc-ISS-001</td><td>MJPEG cross-origin blocking (CF Tunnel)</td><td><span class="status yellow"></span>INVESTIGATING</td><td style="color:var(--hobis-green)">Solution 1: Single Tornado port (recommended)</td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>ARCHITECTURE</h2>
+        <pre style="color:var(--text-secondary);font-size:0.8rem;overflow-x:auto;">
+  HighLink/
+  ├── engine/              ML Pipeline (YOLO11 + ByteTrack + 2-stage)
+  │   ├── detection/       VehicleDetector + EfficientNet classifier
+  │   ├── rules/           F1(wrong_way) + F2(direction) + F3(pedestrian)
+  │   ├── ingest/          ITS CCTV client + FFmpeg decoder
+  │   ├── api/             FastAPI REST + gRPC + WebSocket
+  │   └── core/            Config + Event + Database (PostgreSQL)
+  ├── app/streamlit/       Demo UI (Mode A: upload, Mode C: real-time)
+  │   └── stream_server.py MJPEG server (port 8502) ← CORS issue here
+  ├── data/test_videos/    3 test scenarios (F1/F2/F3)
+  └── docs/requests/       13 work directives (Mac ↔ Company PC workflow)
+        </pre>
+      </div>
+    </div>
+
+    <!-- P1 Diagnostic -->
+    <div id="diag-p1" class="diag-panel" style="display:none">
+      <div class="grid-2">
+        <div class="panel">
+          <h2>P1 SEOULINK KOREAN CLASS</h2>
+          <div class="stat-row"><span class="stat-label">Purpose</span><span class="stat-value cyan">Korean Language Learning Ecosystem</span></div>
+          <div class="stat-row"><span class="stat-label">Phase</span><span class="stat-value">Advanced Beta</span></div>
+          <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">19 (P1.1wc~P1.19wc)</span></div>
+          <div class="stat-row"><span class="stat-label">REQs</span><span class="stat-value">67 tracked</span></div>
+          <div class="stat-row"><span class="stat-label">Size</span><span class="stat-value warn">~1.7 GB</span></div>
+          <div class="stat-row"><span class="stat-label">Components</span><span class="stat-value">3 apps + Python tools</span></div>
+          <div class="diag-tech">
+            <span class="diag-tag">Phaser 3.60</span>
+            <span class="diag-tag">Vite 6</span>
+            <span class="diag-tag">Firebase</span>
+            <span class="diag-tag">PDF.js</span>
+            <span class="diag-tag">Cloudflare Pages</span>
+            <span class="diag-tag">Python</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>3 APPLICATION MODULES</h2>
+          <div class="diag-feature"><span class="check">&#10003;</span> KoreanClassGame: Phaser RPG (30 scenes, Seoul+Fukuoka)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> PDF Textbook Viewer: 11 books, copyright protection</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Web Textbooks: L1~L11 HTML + Storybook (10 chapters)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Teacher Guides: 11 HTML guides</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Traceability System: 1,230+ dialogue IDs mapped</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Illustrations: L1~L6 (60 images) + 11 covers + 9 characters</div>
+          <div class="diag-feature"><span class="pending">&#9679;</span> Firebase Auth: OAuth buttons exist, signIn bug</div>
+          <div class="diag-feature"><span class="missing">&#10007;</span> L7~L11 illustrations (~40-50 needed)</div>
+          <div class="diag-feature"><span class="missing">&#10007;</span> L3~L8 game content data</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>ARCHITECTURE</h2>
+        <pre style="color:var(--text-secondary);font-size:0.8rem;overflow-x:auto;">
+  SeouLink/한국어교실/
+  ├── KoreanClassGame/          Phaser RPG (187MB)
+  │   └── src/scenes/           30+ scene classes (Seoul + Fukuoka maps)
+  ├── annyeong-seoul-textbook/  PDF Viewer (602MB, 11 books)
+  │   └── src/                  Firebase Auth + copyright guard + watermark
+  ├── web_textbooks/            HTML Textbook + Storybook (906MB)
+  │   ├── L1~L11_*.html         11 student textbooks + 11 teacher guides
+  │   └── storybook/            10 chapters + traceability.json (1,230+ IDs)
+  ├── illustrations/            262 files (covers, titles, characters, scenes)
+  └── [25+ Python scripts]      Textbook generation, illustration batch, QA
+        </pre>
+      </div>
+    </div>
+
+    <!-- P2 Diagnostic -->
+    <div id="diag-p2" class="diag-panel" style="display:none">
+      <div class="grid-2">
+        <div class="panel">
+          <h2>P2 GEANT4 SHIELDDOSE</h2>
+          <div class="stat-row"><span class="stat-label">Purpose</span><span class="stat-value cyan">Radiation Shielding Simulation</span></div>
+          <div class="stat-row"><span class="stat-label">Phase</span><span class="stat-value">Phase 3+ (GUI v3)</span></div>
+          <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">16 (P2.1wc~P2.16wc)</span></div>
+          <div class="stat-row"><span class="stat-label">ISS Tracked</span><span class="stat-value warn">104 (89.4% resolved)</span></div>
+          <div class="stat-row"><span class="stat-label">LT Roadmap</span><span class="stat-value">7/26 completed</span></div>
+          <div class="stat-row"><span class="stat-label">Nuclides</span><span class="stat-value">6+1 validated</span></div>
+          <div class="diag-tech">
+            <span class="diag-tag">GEANT4 11.1.2</span>
+            <span class="diag-tag">C++17</span>
+            <span class="diag-tag">Qt5 GUI</span>
+            <span class="diag-tag">CMake</span>
+            <span class="diag-tag">ICRP-74</span>
+            <span class="diag-tag">ByteTrack</span>
+          </div>
+        </div>
+        <div class="panel">
+          <h2>CAPABILITIES</h2>
+          <div class="diag-feature"><span class="check">&#10003;</span> 6+1 nuclides (Co-60, Cs-137, Ir-192, Se-75, I-131, Tc-99m, Cf-252)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> H*(10) ambient dose equivalent (ICRP-74)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> 57 material library + custom materials</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> N-layer slab + STL geometry import</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Shield design optimizer (inverse problem)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Buildup factor (ANS 6.4.3)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Cf-252 neutron (Watt spectrum, multiplicity)</div>
+          <div class="diag-feature"><span class="check">&#10003;</span> Dashboard v3 (GitHub Pages)</div>
+          <div class="diag-feature"><span class="pending">&#9679;</span> 3D trajectory visualization (LT-05 Ph2)</div>
+          <div class="diag-feature"><span class="missing">&#10007;</span> MT parallel computing (ISS-037 blocker)</div>
+        </div>
+      </div>
+      <div class="panel">
+        <h2>LT ROADMAP (7/26)</h2>
+        <div class="progress-bar"><div class="progress-fill" style="width:27%;background:var(--hobis-cyan)"></div></div>
+        <div style="font-size:0.8rem;color:var(--text-meta);margin-bottom:10px">7 completed / 19 planned</div>
+        <table class="req-table">
+          <tr><th>LT</th><th>Task</th><th>Status</th></tr>
+          <tr><td>LT-04</td><td>Cf-252 neutron (Phase 1+2)</td><td style="color:var(--hobis-green)">DONE</td></tr>
+          <tr><td>LT-05</td><td>Scatter tracking (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
+          <tr><td>LT-06</td><td>Complex geometry / STL (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
+          <tr><td>LT-09</td><td>Dose evaluation / buildup (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
+          <tr><td>LT-13</td><td>Visualization / SVG (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
+          <tr><td>LT-14</td><td>Shield design optimizer (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
+          <tr><td>LT-21</td><td>Material freedom (Phase 1~5)</td><td style="color:var(--hobis-green)">DONE</td></tr>
+          <tr><td>LT-01</td><td>Secondary radiation</td><td style="color:var(--text-meta)">PLANNED</td></tr>
+          <tr><td>LT-07</td><td>Electron/beta shielding</td><td style="color:var(--text-meta)">PLANNED</td></tr>
+          <tr><td>LT-12</td><td>Parallel computing (MT/MPI)</td><td style="color:var(--hobis-warn)">BLOCKED (ISS-037)</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REQ/ISS TAB ===== -->
+  <div id="tab-req" class="tab-content">
+    <div class="panel">
+      <h2>REQ/ISS DISTRIBUTION</h2>
+      <div id="reqChart"></div>
+    </div>
+    <div class="panel">
+      <h2>OPEN BLOCKERS</h2>
+      <table class="req-table">
+        <tr><th>Project</th><th>ID</th><th>Description</th><th>Type</th></tr>
+        <tr><td style="color:var(--hobis-cyan)">P18</td><td>P18.4wc-ISS-001</td><td>MJPEG cross-origin (CF Tunnel)</td><td><span class="status yellow"></span>ISS</td></tr>
+        <tr><td style="color:var(--hobis-cyan)">P17</td><td>—</td><td>Tequila API key not obtained</td><td><span class="status red"></span>BLOCKER</td></tr>
+        <tr><td style="color:var(--hobis-cyan)">P16</td><td>—</td><td>Whisper not installed + LUT files missing</td><td><span class="status red"></span>BLOCKER</td></tr>
+        <tr><td style="color:var(--hobis-cyan)">P6</td><td>—</td><td>Upbit API key not obtained</td><td><span class="status red"></span>BLOCKER</td></tr>
+        <tr><td style="color:var(--hobis-cyan)">P2</td><td>ISS-037</td><td>Serial mode forced (MT+VR incompatible)</td><td><span class="status red"></span>ISS</td></tr>
+        <tr><td style="color:var(--hobis-cyan)">T</td><td>T1.8wc-ISS-001</td><td>Session sync intermittent failure</td><td><span class="status yellow"></span>ISS</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ===== PRIORITIES TAB ===== -->
+  <div id="tab-priorities" class="tab-content">
+    <div class="panel">
+      <h2>PRIORITY STACK</h2>
+      <div id="priorityChart"></div>
+    </div>
+    <div class="panel">
+      <h2>URGENT TASKS (User Designated)</h2>
+      <table class="req-table">
+        <tr><th>Project</th><th>Next Action</th><th>Blocker</th></tr>
+        <tr><td style="color:var(--hobis-green)">P18 HighLink</td><td>Resolve MJPEG CORS → F3 test → Event UI</td><td style="color:var(--hobis-warn)">ISS-001</td></tr>
+        <tr><td style="color:var(--hobis-green)">P14 3DLink</td><td>Constraint solver + Multi-sketch + iPad test</td><td>None</td></tr>
+        <tr><td style="color:var(--hobis-green)">P1 Korean Class</td><td>Firebase Auth fix + L7~L11 illustrations</td><td style="color:var(--hobis-warn)">signIn bug</td></tr>
+        <tr><td style="color:var(--hobis-green)">P2 GEANT4</td><td>P2.16wc continuation (LT roadmap)</td><td style="color:var(--hobis-warn)">GEANT4 build env</td></tr>
+        <tr><td style="color:var(--hobis-cyan)">P16 CineLink</td><td>Waiting for video source material</td><td style="color:var(--hobis-alert)">User action needed</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+// Project data
+const projects = [
+  {id:'P18',name:'HighLink',tier:'T1',phase:'Ph.1',sessions:4,health:4,purpose:'Highway AI Surveillance (SL Corp)',tech:'YOLO11, Streamlit, FastAPI, Docker',openReq:6,openIss:1,lastActivity:'04-10'},
+  {id:'P14',name:'3DLink',tier:'T1',phase:'MVP',sessions:6,health:2,purpose:'iPad 3D CAD Modeling',tech:'Swift, Metal, OpenCASCADE',openReq:7,openIss:0,lastActivity:'03-27'},
+  {id:'P1',name:'SeouLink Korean Class',tier:'T1',phase:'Beta',sessions:19,health:3,purpose:'Korean Language Learning Ecosystem',tech:'Phaser, Firebase, PDF.js, Cloudflare',openReq:67,openIss:0,lastActivity:'04-11'},
+  {id:'P2',name:'GEANT4 ShieldDose',tier:'T1',phase:'Ph.3+',sessions:16,health:3,purpose:'Radiation Shielding Simulation',tech:'GEANT4, C++17, Qt5, CMake',openReq:18,openIss:11,lastActivity:'04-01'},
+  {id:'P16',name:'CineLink',tier:'T1',phase:'Initial',sessions:3,health:2,purpose:'Video Production Pipeline',tech:'FFmpeg, Whisper, Python',openReq:9,openIss:1,lastActivity:'04-10'},
+  {id:'P11',name:'MarkLink SL',tier:'T1',phase:'Ph.2+',sessions:49,health:4,purpose:'Office Suite (10 Editors)',tech:'Vanilla JS, Vite 8, Vitest 4',openReq:6,openIss:0,lastActivity:'03-28'},
+  {id:'P12',name:'HOBIS Cf-252',tier:'T2',phase:'Ph.1',sessions:10,health:4,purpose:'Dose Assessment Calculator',tech:'HTML/JS, HOBIS Design',openReq:9,openIss:0,lastActivity:'04-11'},
+  {id:'P3',name:'TripLink SL',tier:'T2',phase:'Operating',sessions:28,health:3,purpose:'Travel Guide Service',tech:'React, Vite, Leaflet',openReq:50,openIss:0,lastActivity:'Active'},
+  {id:'P15',name:'AOMORI',tier:'T2',phase:'Research',sessions:28,health:4,purpose:'TripLink Content Pipeline',tech:'HTML/JS, Python',openReq:3,openIss:0,lastActivity:'Active'},
+  {id:'P10',name:'Hodlum',tier:'T2',phase:'Deploy',sessions:17,health:3,purpose:'Ludlum 3030 Custom Logger',tech:'Electron, C++, Windows',openReq:12,openIss:0,lastActivity:'Active'},
+  {id:'P17',name:'Flight',tier:'T3',phase:'Initial',sessions:2,health:2,purpose:'Flight Comprehensive Service',tech:'Python, FastAPI, PostgreSQL',openReq:9,openIss:0,lastActivity:'04-10'},
+  {id:'P13',name:'PhotoLink',tier:'T3',phase:'Ph.3',sessions:3,health:2,purpose:'Web Photo Editor',tech:'HTML Canvas, JS',openReq:5,openIss:0,lastActivity:'03-22'},
+  {id:'P6',name:'DL Trading',tier:'T4',phase:'Ph.1',sessions:1,health:1,purpose:'Crypto Trading Bot',tech:'Python, Upbit API',openReq:2,openIss:0,lastActivity:'03-15'},
+  {id:'P7',name:'DWVA',tier:'T4',phase:'Ph.1',sessions:1,health:1,purpose:'Deep Web Vulnerability Assessment',tech:'Python, Docker',openReq:2,openIss:0,lastActivity:'03-15'},
+  {id:'P8',name:'Claude Remote',tier:'T4',phase:'Planning',sessions:1,health:1,purpose:'Telegram Bot (Remote Claude)',tech:'Python, Telegram API',openReq:3,openIss:0,lastActivity:'03-15'},
+  {id:'P4',name:'LingoPlay SL',tier:'T4',phase:'—',sessions:1,health:0,purpose:'YouTube Language Class',tech:'—',openReq:0,openIss:0,lastActivity:'—'},
+  {id:'P5',name:'Home (System)',tier:'T4',phase:'—',sessions:2,health:0,purpose:'System Administration',tech:'macOS, Shell',openReq:1,openIss:0,lastActivity:'—'},
+  {id:'P9',name:'MarkLink (Doc)',tier:'T4',phase:'Ph.1',sessions:1,health:1,purpose:'Document Editor (Legacy)',tech:'—',openReq:4,openIss:0,lastActivity:'—'},
+];
+
+const tierColors = {T1:'var(--hobis-green)',T2:'var(--hobis-cyan)',T3:'var(--hobis-warn)',T4:'#5f7481'};
+
+function renderProjects(filter='all', search='') {
+  const list = document.getElementById('projectList');
+  list.innerHTML = '';
+  const s = search.toLowerCase();
+  projects.filter(p => {
+    if(filter!=='all' && p.tier!==filter) return false;
+    if(s && !p.name.toLowerCase().includes(s) && !p.id.toLowerCase().includes(s) && !p.purpose.toLowerCase().includes(s)) return false;
+    return true;
+  }).forEach(p => {
+    const healthDots = Array(5).fill(0).map((_,i) =>
+      `<span style="display:inline-block;width:8px;height:8px;border-radius:50;margin:0 1px;background:${i<p.health?'var(--hobis-green)':'#2a3b47'};${i<p.health?'box-shadow:0 0 4px var(--hobis-green)':''}"></span>`
+    ).join('');
+    list.innerHTML += `
+      <div class="project-card" data-tier="${p.tier}" onclick="this.classList.toggle('expanded')">
+        <div class="card-header">
+          <div>
+            <span style="color:${tierColors[p.tier]};font-size:0.75rem;margin-right:8px">${p.id}</span>
+            <span class="card-title" style="color:${tierColors[p.tier]}">${p.name}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span class="card-badge" style="color:${tierColors[p.tier]}">${p.tier}</span>
+            <span class="card-badge">${p.phase}</span>
+            <span style="font-size:0.7rem">${healthDots}</span>
+          </div>
+        </div>
+        <div class="card-detail">
+          <table>
+            <tr><td>Purpose</td><td>${p.purpose}</td></tr>
+            <tr><td>Tech Stack</td><td><div class="diag-tech">${p.tech.split(', ').map(t=>'<span class="diag-tag">'+t+'</span>').join('')}</div></td></tr>
+            <tr><td>Sessions</td><td>${p.sessions}</td></tr>
+            <tr><td>Open REQ</td><td style="color:${p.openReq>5?'var(--hobis-warn)':'var(--hobis-green)'}">${p.openReq}</td></tr>
+            <tr><td>Open ISS</td><td style="color:${p.openIss>0?'var(--hobis-warn)':'var(--hobis-green)'}">${p.openIss}</td></tr>
+            <tr><td>Last Activity</td><td>${p.lastActivity}</td></tr>
+          </table>
+        </div>
+      </div>`;
+  });
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.target.classList.add('active');
+  if(name==='req') renderReqChart();
+  if(name==='priorities') renderPriorityChart();
+}
+
+function filterTier(tier, btn) {
+  document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProjects(tier, document.getElementById('projectSearch').value);
+}
+
+function filterProjects() {
+  const activeFilter = document.querySelector('.filter-bar .filter-btn.active');
+  const tier = activeFilter ? activeFilter.textContent.split(' ')[0] : 'ALL';
+  renderProjects(tier==='ALL'?'all':tier, document.getElementById('projectSearch').value);
+}
+
+function switchDiag(id, btn) {
+  document.querySelectorAll('.diag-panel').forEach(el => el.style.display='none');
+  document.querySelectorAll('#tab-diagnostics .filter-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('diag-'+id).style.display='block';
+  btn.classList.add('active');
+}
+
+function renderReqChart() {
+  const data = [
+    {name:'P3 TripLink',total:50,open:14,color:'#00f7ff'},
+    {name:'P1 Korean',total:67,open:30,color:'#00ff33'},
+    {name:'P2 GEANT4',total:18,open:11,color:'#ffcc00'},
+    {name:'P11 MarkLink',total:49,open:6,color:'#a064ff'},
+    {name:'P10 Hodlum',total:22,open:12,color:'#ff3300'},
+    {name:'P18 HighLink',total:6,open:6,color:'#ff64c8'},
+    {name:'P12 HOBIS',total:9,open:9,color:'#ff9933'},
+    {name:'P16 CineLink',total:9,open:6,color:'#33ccff'},
+    {name:'P17 Flight',total:9,open:5,color:'#00f7ff'},
+    {name:'P14 3DLink',total:7,open:7,color:'#00ff33'},
+    {name:'P13 PhotoLink',total:5,open:5,color:'#ffcc00'},
+    {name:'P15 AOMORI',total:3,open:3,color:'#a064ff'},
+  ];
+  const maxTotal = Math.max(...data.map(d=>d.total));
+  const chart = document.getElementById('reqChart');
+  chart.innerHTML = data.map(d => `
+    <div style="display:flex;align-items:center;gap:10px;margin:6px 0;">
+      <div style="width:120px;font-size:0.75rem;color:${d.color};text-align:right;flex-shrink:0">${d.name}</div>
+      <div style="flex:1;position:relative;height:16px;background:rgba(255,255,255,0.03);border-radius:3px;overflow:hidden;">
+        <div style="position:absolute;height:100%;width:${d.total/maxTotal*100}%;background:rgba(${hexToRgb(d.color)},0.15);border-radius:3px;"></div>
+        <div style="position:absolute;height:100%;width:${d.open/maxTotal*100}%;background:rgba(${hexToRgb(d.color)},0.4);border-radius:3px;"></div>
+      </div>
+      <div style="width:80px;font-size:0.75rem;color:var(--text-meta);flex-shrink:0">${d.open}/${d.total} open</div>
+    </div>
+  `).join('');
+}
+
+function renderPriorityChart() {
+  const chart = document.getElementById('priorityChart');
+  const tiers = [
+    {tier:'T1',label:'FOCUS',color:'var(--hobis-green)',projects:['P18 HighLink','P14 3DLink','P1 Korean','P2 GEANT4','P16 CineLink*','P11 MarkLink']},
+    {tier:'T2',label:'MAINTAIN',color:'var(--hobis-cyan)',projects:['P12 HOBIS','P3 TripLink','P15 AOMORI','P10 Hodlum']},
+    {tier:'T3',label:'STANDBY',color:'var(--hobis-warn)',projects:['P17 Flight','P13 PhotoLink']},
+    {tier:'T4',label:'DORMANT',color:'#5f7481',projects:['P6 DL Trading','P7 DWVA','P8 Claude Remote']},
+  ];
+  chart.innerHTML = tiers.map(t => `
+    <div style="margin:12px 0;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span style="color:${t.color};font-family:Orbitron;font-size:0.85rem;width:30px">${t.tier}</span>
+        <span style="color:${t.color};font-size:0.75rem">${t.label}</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-left:40px;">
+        ${t.projects.map(p => `<span style="padding:4px 10px;border:1px solid ${t.color};border-radius:3px;font-size:0.75rem;color:${t.color};background:rgba(${t.color==='var(--hobis-green)'?'0,255,51':t.color==='var(--hobis-cyan)'?'0,247,255':t.color==='var(--hobis-warn)'?'255,204,0':'95,116,129'},0.1)">${p}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function hexToRgb(hex) {
+  hex = hex.replace('#','');
+  return [parseInt(hex.substr(0,2),16),parseInt(hex.substr(2,2),16),parseInt(hex.substr(4,2),16)].join(',');
+}
+
+// Init
+renderProjects();
+</script>
+</body>
+</html>
