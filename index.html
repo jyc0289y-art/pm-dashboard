@@ -71,7 +71,19 @@ body {
 .tab:hover { border-color:var(--cyan); color:var(--cyan); }
 .tab.active { border-color:var(--cyan); color:var(--cyan); background:rgba(0,247,255,0.08); text-shadow:0 0 6px var(--cyan); }
 .tab.instr-tab.active { border-color:var(--purple); color:var(--purple); background:rgba(169,123,255,0.08); text-shadow:0 0 6px var(--purple); }
+.tab.sync-btn { border-color:var(--green); color:var(--green); }
+.tab.sync-btn:hover { background:rgba(0,255,51,0.1); text-shadow:0 0 6px var(--green); }
+.tab.sync-btn.copied { background:rgba(0,255,51,0.15); text-shadow:0 0 8px var(--green); }
 .updated { color:var(--text-meta); font-size:11px; white-space:nowrap; }
+.sync-toast {
+  position:fixed; bottom:20px; right:20px; z-index:999;
+  background:var(--panel); border:1px solid var(--green);
+  color:var(--green); padding:10px 16px; font-size:12px;
+  box-shadow:0 0 12px rgba(0,255,51,0.3);
+  opacity:0; transition:opacity 0.3s;
+  max-width:380px;
+}
+.sync-toast.show { opacity:1; }
 
 .view { display:none; padding:16px 20px; }
 .view.active { display:block; }
@@ -200,6 +212,7 @@ body {
     <button class="tab active" onclick="switchTab('overview',this)">OVERVIEW</button>
     <button class="tab" onclick="switchTab('documents',this)">DOCUMENTS</button>
     <button class="tab instr-tab" onclick="switchTab('instructions',this)">INSTRUCTIONS</button>
+    <button class="tab sync-btn" onclick="triggerSync(this)" title="동기화 명령을 클립보드에 복사">⟳ SYNC</button>
   </div>
   <div class="updated" id="updated-ts">—</div>
 </div>
@@ -495,6 +508,33 @@ function renderMD(md) {
 
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function escAttr(s) { return (s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+
+// ── SYNC BUTTON ──
+function triggerSync(btn) {
+  const SYNC_CMD = 'python3 "/Users/jyc/Library/Mobile Documents/com~apple~CloudDocs/developer/pm-dashboard/sync_dochub.py"';
+  navigator.clipboard.writeText(SYNC_CMD).then(() => {
+    btn.textContent = '✓ COPIED';
+    btn.classList.add('copied');
+    showToast('⟳ 동기화 명령이 클립보드에 복사됐습니다.\n터미널에 붙여넣기(⌘V)하여 실행하세요.\n\n' + SYNC_CMD);
+    setTimeout(() => { btn.textContent = '⟳ SYNC'; btn.classList.remove('copied'); }, 2500);
+  }).catch(() => {
+    showToast('클립보드 접근 실패. 아래 명령을 직접 실행하세요:\n\n' + SYNC_CMD);
+  });
+}
+
+function showToast(msg) {
+  let t = document.getElementById('sync-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'sync-toast';
+    t.className = 'sync-toast';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer = setTimeout(() => t.classList.remove('show'), 4000);
+}
 </script>
 </body>
 </html>
