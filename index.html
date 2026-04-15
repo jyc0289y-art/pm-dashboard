@@ -3,673 +3,670 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SL Corporation PM Dashboard</title>
+<title>SL Corporation — Portfolio DocHub</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root {
-  --hobis-green: #00ff33;
-  --hobis-cyan: #00f7ff;
-  --hobis-bg: #0a0a0c;
-  --hobis-panel: #111418;
-  --hobis-border: #2a3b47;
-  --hobis-alert: #ff3300;
-  --hobis-warn: #ffcc00;
-  --input-bg: #0f1215;
+  --green: #00ff33;
+  --cyan: #00f7ff;
+  --bg: #0a0a0c;
+  --panel: #111418;
+  --panel2: #161b22;
+  --border: #2a3b47;
+  --alert: #ff3300;
+  --warn: #ffcc00;
+  --purple: #a97bff;
   --text-meta: #8fa3b0;
-  --text-secondary: #a0c0c0;
-  --text-bright: #e0e0e0;
+  --text-sec: #a0c0c0;
+  --text: #e0e0e0;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
-  background: var(--hobis-bg);
-  color: var(--text-bright);
-  font-family: 'Share Tech Mono', Consolas, monospace;
-  font-size: 14px;
-  line-height: 1.6;
-  min-height: 100vh;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Share Tech Mono',Consolas,monospace;
+  font-size:13px;
+  line-height:1.6;
+  min-height:100vh;
 }
-::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar { width:4px; height:4px; }
 ::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:var(--hobis-border); border-radius:2px; }
-::-webkit-scrollbar-thumb:hover { background:var(--hobis-cyan); }
+::-webkit-scrollbar-thumb { background:var(--border); border-radius:2px; }
+::-webkit-scrollbar-thumb:hover { background:var(--cyan); }
 
-.container { max-width:1400px; margin:0 auto; padding:15px; }
-
-h1 {
-  font-family:'Orbitron',sans-serif;
-  font-size:1.4rem;
-  color:var(--hobis-cyan);
-  text-shadow:0 0 10px var(--hobis-cyan);
-  margin-bottom:5px;
+/* ── TOP BAR ── */
+.topbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 20px;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:100;
 }
-h2 {
+.topbar-title {
   font-family:'Orbitron',sans-serif;
   font-size:1rem;
-  color:var(--hobis-cyan);
-  margin-bottom:10px;
+  color:var(--cyan);
+  text-shadow:0 0 8px var(--cyan);
+  letter-spacing:2px;
 }
-h3 {
+.topbar-sub { color:var(--text-meta); font-size:11px; margin-top:2px; }
+.tabs { display:flex; gap:4px; }
+.tab {
+  padding:6px 16px;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text-meta);
+  cursor:pointer;
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;
+  letter-spacing:1px;
+  transition:all 0.15s;
+}
+.tab:hover { border-color:var(--cyan); color:var(--cyan); }
+.tab.active {
+  border-color:var(--cyan);
+  color:var(--cyan);
+  background:rgba(0,247,255,0.08);
+  text-shadow:0 0 6px var(--cyan);
+}
+.updated { color:var(--text-meta); font-size:11px; }
+
+/* ── VIEWS ── */
+.view { display:none; padding:16px 20px; }
+.view.active { display:block; }
+
+/* ── OVERVIEW ── */
+.section-title {
   font-family:'Orbitron',sans-serif;
   font-size:0.85rem;
-  color:var(--hobis-green);
-  margin-bottom:8px;
+  color:var(--cyan);
+  letter-spacing:2px;
+  margin-bottom:12px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--border);
+}
+.stats-row {
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+  flex-wrap:wrap;
+}
+.stat-card {
+  flex:1;
+  min-width:120px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:12px 16px;
+  text-align:center;
+}
+.stat-val {
+  font-family:'Orbitron',sans-serif;
+  font-size:1.8rem;
+  color:var(--cyan);
+  text-shadow:0 0 10px var(--cyan);
+}
+.stat-label { color:var(--text-meta); font-size:11px; margin-top:4px; }
+
+.proj-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  gap:10px;
+  margin-bottom:20px;
+}
+.proj-card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  padding:14px;
+  cursor:pointer;
+  transition:border-color 0.15s, background 0.15s;
+}
+.proj-card:hover {
+  border-color:var(--cyan);
+  background:var(--panel2);
+}
+.proj-card-header {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:6px;
+}
+.proj-pnum {
+  font-family:'Orbitron',sans-serif;
+  font-size:0.75rem;
+  color:var(--text-meta);
+}
+.proj-status {
+  font-size:10px;
+  padding:2px 8px;
+  border:1px solid;
+}
+.status-active { color:var(--green); border-color:var(--green); }
+.status-done { color:var(--cyan); border-color:var(--cyan); }
+.status-archived { color:var(--text-meta); border-color:var(--border); }
+
+.proj-name {
+  font-family:'Orbitron',sans-serif;
+  font-size:0.9rem;
+  color:var(--text);
+  margin-bottom:4px;
+}
+.proj-desc { color:var(--text-meta); font-size:11px; margin-bottom:8px; }
+.proj-doc-count { color:var(--text-sec); font-size:11px; }
+.proj-doc-count span { color:var(--cyan); font-weight:bold; }
+
+/* ── DOCUMENTS VIEW ── */
+.doc-layout {
+  display:grid;
+  grid-template-columns:220px 1fr 1fr;
+  gap:0;
+  height:calc(100vh - 100px);
+}
+.doc-sidebar {
+  border:1px solid var(--border);
+  border-right:none;
+  overflow-y:auto;
+  background:var(--panel);
+}
+.doc-list-panel {
+  border:1px solid var(--border);
+  border-right:none;
+  overflow-y:auto;
+  background:var(--panel2);
+}
+.doc-viewer {
+  border:1px solid var(--border);
+  overflow-y:auto;
+  padding:20px;
+  background:var(--bg);
 }
 
-.header {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:15px 0; border-bottom:1px dashed var(--hobis-border);
-  margin-bottom:15px;
+.sidebar-group { border-bottom:1px solid var(--border); }
+.sidebar-group-hdr {
+  padding:8px 12px;
+  cursor:pointer;
+  color:var(--text-meta);
+  font-size:11px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  transition:color 0.15s;
+  user-select:none;
 }
-.header-meta { color:var(--text-meta); font-size:0.8rem; }
+.sidebar-group-hdr:hover { color:var(--cyan); }
+.sidebar-group-hdr.active { color:var(--cyan); background:rgba(0,247,255,0.06); }
+.sidebar-group-hdr .pnum {
+  font-family:'Orbitron',sans-serif;
+  font-size:10px;
+  color:inherit;
+}
+.sidebar-group-hdr .cnt {
+  font-size:10px;
+  color:var(--text-meta);
+}
+.sidebar-group-hdr.active .cnt { color:var(--cyan); }
 
-/* Tabs */
-.tabs {
-  display:flex; gap:0; margin-bottom:15px;
-  background:#15191d; border:1px solid var(--hobis-border); border-radius:4px;
-  overflow:hidden;
+.doc-list-hdr {
+  padding:10px 14px;
+  border-bottom:1px solid var(--border);
+  color:var(--cyan);
+  font-size:12px;
+  font-family:'Orbitron',sans-serif;
+  letter-spacing:1px;
+  position:sticky;
+  top:0;
+  background:var(--panel2);
+  z-index:10;
 }
-.tab {
-  padding:10px 20px; cursor:pointer; color:#5f7481;
-  font-family:'Orbitron',sans-serif; font-size:0.8rem;
-  transition:0.15s; border:none; background:none;
-  border-right:1px solid var(--hobis-border);
+.doc-item {
+  padding:10px 14px;
+  border-bottom:1px solid rgba(42,59,71,0.5);
+  cursor:pointer;
+  transition:background 0.1s;
 }
-.tab:last-child { border-right:none; }
-.tab:hover { color:var(--text-secondary); background:rgba(0,247,255,0.05); }
-.tab.active {
-  color:var(--hobis-cyan); background:rgba(0,247,255,0.15);
-  box-shadow:0 0 10px rgba(0,247,255,0.1);
+.doc-item:hover { background:rgba(0,247,255,0.05); }
+.doc-item.active { background:rgba(0,247,255,0.1); border-left:2px solid var(--cyan); }
+.doc-item-title { color:var(--text); font-size:12px; margin-bottom:3px; }
+.doc-item-meta {
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
 }
-
-/* Panels */
-.panel {
-  background:var(--hobis-panel);
-  border:1px solid var(--hobis-border);
-  border-radius:4px;
-  padding:15px;
-  margin-bottom:15px;
-  position:relative;
-  box-shadow:inset 0 0 20px rgba(0,0,0,0.5);
-}
-.panel::before {
-  content:''; position:absolute; top:0; left:0;
-  width:10px; height:10px;
-  border-top:1px solid var(--hobis-cyan);
-  border-left:1px solid var(--hobis-cyan);
-}
-.panel::after {
-  content:''; position:absolute; bottom:0; right:0;
-  width:10px; height:10px;
-  border-bottom:1px solid var(--hobis-cyan);
-  border-right:1px solid var(--hobis-cyan);
-}
-
-/* Grid */
-.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
-.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; }
-@media(max-width:768px) {
-  .grid-2, .grid-3 { grid-template-columns:1fr; }
-}
-
-/* Stats */
-.stat-row { display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px dashed rgba(42,59,71,0.5); }
-.stat-label { color:var(--text-meta); }
-.stat-value { color:var(--hobis-green); font-weight:bold; }
-.stat-value.cyan { color:var(--hobis-cyan); }
-.stat-value.warn { color:var(--hobis-warn); }
-.stat-value.alert { color:var(--hobis-alert); }
-
-/* Progress bar */
-.progress-bar {
-  height:8px; background:rgba(255,255,255,0.05);
-  border-radius:4px; overflow:hidden; margin:5px 0;
-}
-.progress-fill {
-  height:100%; border-radius:4px; transition:width 0.6s ease;
+.doc-item-ts { color:var(--text-meta); font-size:10px; }
+.doc-tag {
+  font-size:9px;
+  padding:1px 5px;
+  border:1px solid var(--border);
+  color:var(--text-meta);
 }
 
-/* Project card */
-.project-card {
-  background:rgba(255,255,255,0.02);
-  border-left:3px solid var(--hobis-border);
-  padding:12px; margin-bottom:8px;
-  border-radius:0 4px 4px 0;
-  cursor:pointer; transition:0.15s;
+/* Viewer */
+.viewer-placeholder {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+  color:var(--text-meta);
+  text-align:center;
+  gap:10px;
 }
-.project-card:hover {
-  background:rgba(0,247,255,0.05);
-  border-left-color:var(--hobis-cyan);
+.viewer-placeholder .icon {
+  font-size:2rem;
+  opacity:0.4;
 }
-.project-card.expanded .card-detail { display:block; }
-.card-header {
-  display:flex; justify-content:space-between; align-items:center;
+.viewer-hdr {
+  margin-bottom:16px;
+  padding-bottom:10px;
+  border-bottom:1px solid var(--border);
 }
-.card-title { font-family:'Orbitron',sans-serif; font-size:0.85rem; }
-.card-badge {
-  font-size:0.7rem; padding:2px 8px;
-  border-radius:3px; background:#1a2329;
+.viewer-hdr h2 {
+  font-family:'Orbitron',sans-serif;
+  font-size:0.85rem;
+  color:var(--cyan);
+  margin-bottom:4px;
 }
-.card-detail { display:none; margin-top:10px; padding-top:10px; border-top:1px dashed var(--hobis-border); }
-.card-detail table { width:100%; border-collapse:collapse; }
-.card-detail td { padding:4px 8px; font-size:0.8rem; vertical-align:top; }
-.card-detail td:first-child { color:var(--text-meta); width:120px; }
+.viewer-hdr .vmeta { color:var(--text-meta); font-size:11px; }
+.viewer-body h1 { font-family:'Orbitron',sans-serif; font-size:1rem; color:var(--cyan); margin:12px 0 8px; }
+.viewer-body h2 { font-family:'Orbitron',sans-serif; font-size:0.85rem; color:var(--cyan); margin:10px 0 6px; border-bottom:1px solid var(--border); padding-bottom:4px; }
+.viewer-body h3 { color:var(--text-sec); margin:8px 0 4px; font-size:0.82rem; }
+.viewer-body h4 { color:var(--text-meta); margin:6px 0 4px; font-size:0.8rem; }
+.viewer-body p { margin-bottom:8px; line-height:1.7; }
+.viewer-body ul, .viewer-body ol { padding-left:18px; margin-bottom:8px; }
+.viewer-body li { margin-bottom:3px; line-height:1.6; }
+.viewer-body code { background:rgba(0,247,255,0.1); color:var(--cyan); padding:1px 5px; font-family:'Share Tech Mono',monospace; font-size:0.9em; }
+.viewer-body pre { background:var(--panel); border:1px solid var(--border); padding:12px; margin:8px 0; overflow-x:auto; }
+.viewer-body pre code { background:none; color:var(--green); padding:0; }
+.viewer-body blockquote { border-left:3px solid var(--cyan); padding-left:12px; color:var(--text-meta); margin:8px 0; }
+.viewer-body table { border-collapse:collapse; margin:10px 0; width:100%; font-size:12px; }
+.viewer-body th { background:var(--panel); color:var(--cyan); padding:6px 10px; border:1px solid var(--border); text-align:left; }
+.viewer-body td { padding:5px 10px; border:1px solid var(--border); color:var(--text); }
+.viewer-body tr:nth-child(even) td { background:rgba(255,255,255,0.02); }
+.viewer-body a { color:var(--cyan); text-decoration:none; }
+.viewer-body a:hover { text-decoration:underline; }
+.viewer-body hr { border:none; border-top:1px solid var(--border); margin:12px 0; }
+.viewer-body strong { color:var(--text); font-weight:bold; }
+.viewer-body em { color:var(--text-sec); font-style:italic; }
+.viewer-body .chk-done { color:var(--green); }
+.viewer-body .chk-todo { color:var(--text-meta); }
+.loading { color:var(--text-meta); padding:20px; }
+.fetch-err { color:var(--alert); padding:10px; font-size:12px; }
 
-/* REQ table */
-.req-table { width:100%; border-collapse:collapse; font-size:0.8rem; }
-.req-table th {
-  text-align:left; padding:6px 8px;
-  color:var(--hobis-cyan); border-bottom:1px solid var(--hobis-border);
-  font-family:'Orbitron',sans-serif; font-size:0.75rem;
+/* Search bar */
+.search-bar {
+  padding:8px 12px;
+  border-bottom:1px solid var(--border);
+  background:var(--panel2);
 }
-.req-table td { padding:6px 8px; border-bottom:1px dashed rgba(42,59,71,0.3); }
-.req-table tr:hover { background:rgba(0,247,255,0.03); }
-
-/* Status dots */
-.status { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; }
-.status.green { background:var(--hobis-green); box-shadow:0 0 6px var(--hobis-green); }
-.status.yellow { background:var(--hobis-warn); box-shadow:0 0 6px var(--hobis-warn); }
-.status.red { background:var(--hobis-alert); box-shadow:0 0 6px var(--hobis-alert); }
-.status.gray { background:#5f7481; }
-
-/* Filter bar */
-.filter-bar {
-  display:flex; gap:8px; margin-bottom:15px; flex-wrap:wrap;
+.search-bar input {
+  width:100%;
+  background:var(--bg);
+  border:1px solid var(--border);
+  color:var(--text);
+  padding:5px 10px;
+  font-family:'Share Tech Mono',monospace;
+  font-size:12px;
+  outline:none;
 }
-.filter-btn {
-  padding:6px 12px; border:1px solid #3c4c56;
-  background:rgba(0,0,0,0.3); color:#8fa3b0;
-  font-family:'Share Tech Mono',monospace; font-size:0.8rem;
-  border-radius:4px; cursor:pointer; transition:0.15s;
-}
-.filter-btn:hover { border-color:var(--hobis-cyan); color:var(--text-secondary); }
-.filter-btn.active { background:rgba(0,247,255,0.15); color:var(--hobis-cyan); border-color:var(--hobis-cyan); }
-
-/* Section hide */
-.tab-content { display:none; }
-.tab-content.active { display:block; }
-
-/* Diagnostic detail */
-.diag-section { margin-bottom:20px; }
-.diag-tech { display:flex; gap:8px; flex-wrap:wrap; margin:8px 0; }
-.diag-tag {
-  padding:3px 10px; border-radius:3px;
-  background:rgba(0,247,255,0.1); color:var(--hobis-cyan);
-  font-size:0.75rem; border:1px solid rgba(0,247,255,0.2);
-}
-.diag-feature {
-  display:flex; align-items:center; gap:8px; padding:6px 0;
-  border-bottom:1px dashed rgba(42,59,71,0.3); font-size:0.85rem;
-}
-.diag-feature .check { color:var(--hobis-green); }
-.diag-feature .pending { color:var(--hobis-warn); }
-.diag-feature .missing { color:var(--hobis-alert); }
-
-/* Collapsible */
-.collapsible-header {
-  display:flex; justify-content:space-between; align-items:center;
-  cursor:pointer; padding:8px 0;
-}
-.collapsible-header .arrow { transition:transform 0.2s; color:var(--hobis-cyan); }
-.collapsible-header.open .arrow { transform:rotate(90deg); }
-.collapsible-body { display:none; padding-top:8px; }
-.collapsible-body.open { display:block; }
-
-/* Search */
-.search-input {
-  width:100%; padding:10px;
-  background:var(--input-bg); border:1px solid #3c4c56;
-  color:var(--hobis-green); font-family:'Share Tech Mono',monospace;
-  font-size:0.9rem; border-radius:3px; margin-bottom:15px;
-}
-.search-input:focus { outline:none; border-color:var(--hobis-cyan); }
-.search-input::placeholder { color:#5f7481; }
-
-/* Context warning */
-.context-bar {
-  background:rgba(255,204,0,0.1); border:1px solid rgba(255,204,0,0.3);
-  padding:8px 15px; border-radius:4px; margin-bottom:15px;
-  display:flex; justify-content:space-between; align-items:center;
-  font-size:0.8rem; color:var(--hobis-warn);
-}
+.search-bar input:focus { border-color:var(--cyan); }
+.search-bar input::placeholder { color:var(--text-meta); }
 </style>
 </head>
 <body>
-<div class="container">
-  <!-- Header -->
-  <div class="header">
-    <div>
-      <h1>SL CORPORATION PM DASHBOARD</h1>
-      <div class="header-meta">PM.1wc | Portfolio Manager | 2026-04-11</div>
-    </div>
-    <div style="text-align:right">
-      <div class="header-meta">Projects: <span style="color:var(--hobis-green)">18</span> | Sessions: <span style="color:var(--hobis-cyan)">278+</span></div>
-      <div class="header-meta">REQ: <span style="color:var(--hobis-green)">160+</span> | ISS: <span style="color:var(--hobis-warn)">104+</span></div>
-    </div>
-  </div>
 
-  <!-- Tabs -->
+<div class="topbar">
+  <div>
+    <div class="topbar-title">SL CORPORATION — PORTFOLIO DOCHUB</div>
+    <div class="topbar-sub">P01~P22 전체 프로젝트 문서 허브 | 브리핑 채팅창 관리</div>
+  </div>
   <div class="tabs">
     <button class="tab active" onclick="switchTab('overview')">OVERVIEW</button>
-    <button class="tab" onclick="switchTab('diagnostics')">DIAGNOSTICS</button>
-    <button class="tab" onclick="switchTab('req')">REQ/ISS</button>
-    <button class="tab" onclick="switchTab('priorities')">PRIORITIES</button>
+    <button class="tab" onclick="switchTab('documents')">DOCUMENTS</button>
   </div>
+  <div class="updated" id="updated-ts">업데이트: —</div>
+</div>
 
-  <!-- ===== OVERVIEW TAB ===== -->
-  <div id="tab-overview" class="tab-content active">
-    <!-- Summary Stats -->
-    <div class="grid-3">
-      <div class="panel">
-        <h3>INFRASTRUCTURE</h3>
-        <div class="stat-row"><span class="stat-label">CLAUDE.md</span><span class="stat-value">8/18</span></div>
-        <div class="stat-row"><span class="stat-label">tree_builder</span><span class="stat-value">18/18</span></div>
-        <div class="stat-row"><span class="stat-label">REQ System</span><span class="stat-value">18/18</span></div>
-        <div class="stat-row"><span class="stat-label">ISS System</span><span class="stat-value">18/18</span></div>
-      </div>
-      <div class="panel">
-        <h3>PORTFOLIO HEALTH</h3>
-        <div class="stat-row"><span class="stat-label">Active</span><span class="stat-value">10</span></div>
-        <div class="stat-row"><span class="stat-label">Standby</span><span class="stat-value cyan">4</span></div>
-        <div class="stat-row"><span class="stat-label">Dormant</span><span class="stat-value warn">4</span></div>
-        <div class="stat-row"><span class="stat-label">Stale Sessions</span><span class="stat-value">0 (cleaned)</span></div>
-      </div>
-      <div class="panel">
-        <h3>PM.1wc SESSION</h3>
-        <div class="stat-row"><span class="stat-label">Agents Dispatched</span><span class="stat-value cyan">10</span></div>
-        <div class="stat-row"><span class="stat-label">All Completed</span><span class="stat-value">10/10</span></div>
-        <div class="stat-row"><span class="stat-label">REQs Created</span><span class="stat-value">11</span></div>
-        <div class="stat-row"><span class="stat-label">REQs Completed</span><span class="stat-value">11/11</span></div>
-      </div>
-    </div>
-
-    <!-- Project List -->
-    <div class="panel">
-      <h2>PROJECT MATRIX</h2>
-      <input type="text" class="search-input" id="projectSearch" placeholder="Search projects..." oninput="filterProjects()">
-      <div class="filter-bar">
-        <button class="filter-btn active" onclick="filterTier('all',this)">ALL</button>
-        <button class="filter-btn" onclick="filterTier('T1',this)">T1 FOCUS</button>
-        <button class="filter-btn" onclick="filterTier('T2',this)">T2 MAINTAIN</button>
-        <button class="filter-btn" onclick="filterTier('T3',this)">T3 STANDBY</button>
-        <button class="filter-btn" onclick="filterTier('T4',this)">T4 DORMANT</button>
-      </div>
-      <div id="projectList"></div>
-    </div>
+<!-- ── OVERVIEW VIEW ── -->
+<div class="view active" id="view-overview">
+  <div style="max-width:1400px;margin:0 auto;">
+    <div class="stats-row" id="stats-row"></div>
+    <div class="section-title">▸ ACTIVE PROJECTS</div>
+    <div class="proj-grid" id="grid-active"></div>
+    <div class="section-title">▸ COMPLETED / ARCHIVED</div>
+    <div class="proj-grid" id="grid-other"></div>
   </div>
+</div>
 
-  <!-- ===== DIAGNOSTICS TAB ===== -->
-  <div id="tab-diagnostics" class="tab-content">
-    <div class="filter-bar">
-      <button class="filter-btn active" onclick="switchDiag('p18',this)">P18 HIGHLINK</button>
-      <button class="filter-btn" onclick="switchDiag('p1',this)">P1 KOREAN CLASS</button>
-      <button class="filter-btn" onclick="switchDiag('p2',this)">P2 GEANT4</button>
-    </div>
+<!-- ── DOCUMENTS VIEW ── -->
+<div class="view" id="view-documents">
+  <div class="doc-layout">
+    <!-- Sidebar: project list -->
+    <div class="doc-sidebar" id="doc-sidebar"></div>
 
-    <!-- P18 Diagnostic -->
-    <div id="diag-p18" class="diag-panel">
-      <div class="grid-2">
-        <div class="panel">
-          <h2>P18 HIGHLINK</h2>
-          <div class="stat-row"><span class="stat-label">Purpose</span><span class="stat-value cyan">Highway AI Surveillance</span></div>
-          <div class="stat-row"><span class="stat-label">Business</span><span class="stat-value">SL Corp Brand</span></div>
-          <div class="stat-row"><span class="stat-label">Partner</span><span class="stat-value">Friend (Sales) + jyc (Dev)</span></div>
-          <div class="stat-row"><span class="stat-label">Phase</span><span class="stat-value">Phase 1 Complete</span></div>
-          <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">4 (P18.1wc~P18.4wc)</span></div>
-          <div class="stat-row"><span class="stat-label">Git Commits</span><span class="stat-value">39</span></div>
-          <div class="diag-tech">
-            <span class="diag-tag">YOLO11-L</span>
-            <span class="diag-tag">ByteTrack</span>
-            <span class="diag-tag">Streamlit</span>
-            <span class="diag-tag">FastAPI</span>
-            <span class="diag-tag">gRPC</span>
-            <span class="diag-tag">PostgreSQL</span>
-            <span class="diag-tag">Docker</span>
-            <span class="diag-tag">RTX 4060</span>
-          </div>
-        </div>
-        <div class="panel">
-          <h2>FEATURE STATUS</h2>
-          <div class="diag-feature"><span class="check">&#10003;</span> F1: Bidirectional flow detection</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> F2: Wrong-way detection (angle + temporal)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> F3: Pedestrian/motorcycle detection</div>
-          <div class="diag-feature"><span class="missing">&#10007;</span> F4: Congestion/accident (Phase 2)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> 2-stage classifier (EfficientNet-B0)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Streamlit demo UI (Mode A+C)</div>
-          <div class="diag-feature"><span class="pending">&#9679;</span> MJPEG remote streaming (CORS blocked)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> REST API + WebSocket events</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Docker Compose (GPU)</div>
-        </div>
+    <!-- Middle: doc list -->
+    <div class="doc-list-panel">
+      <div class="doc-list-hdr" id="doc-list-hdr">문서 목록</div>
+      <div class="search-bar">
+        <input type="text" id="search-input" placeholder="검색..." oninput="filterDocs()">
       </div>
-      <div class="panel">
-        <h2>OPEN REQ/ISS</h2>
-        <table class="req-table">
-          <tr><th>ID</th><th>Description</th><th>Status</th><th>Priority</th></tr>
-          <tr><td>P18.4wc-REQ-001</td><td>MJPEG remote embedding resolution</td><td><span class="status yellow"></span>IN PROGRESS</td><td style="color:var(--hobis-alert)">BLOCKER</td></tr>
-          <tr><td>P18.3wc-REQ-001</td><td>F3 test execution (3 video test)</td><td><span class="status yellow"></span>IN PROGRESS</td><td>HIGH</td></tr>
-          <tr><td>P18.3wc-REQ-002</td><td>Real ITS CCTV stream integration test</td><td><span class="status red"></span>NOT STARTED</td><td>HIGH</td></tr>
-          <tr><td>P18.3wc-REQ-003</td><td>Streamlit event alert UI</td><td><span class="status red"></span>NOT STARTED</td><td>MED (blocked)</td></tr>
-          <tr><td>P18.3wc-REQ-004</td><td>Phase terminology doc</td><td><span class="status red"></span>NOT STARTED</td><td>LOW</td></tr>
-          <tr><td>P18.3wc-REQ-005</td><td>F4 implementation (congestion/accident)</td><td><span class="status red"></span>NOT STARTED</td><td>Phase 2</td></tr>
-        </table>
-        <div style="margin-top:10px">
-          <table class="req-table">
-            <tr><th>ISS ID</th><th>Description</th><th>Status</th><th>Solution</th></tr>
-            <tr><td>P18.4wc-ISS-001</td><td>MJPEG cross-origin blocking (CF Tunnel)</td><td><span class="status yellow"></span>INVESTIGATING</td><td style="color:var(--hobis-green)">Solution 1: Single Tornado port (recommended)</td></tr>
-          </table>
-        </div>
-      </div>
-      <div class="panel">
-        <h2>ARCHITECTURE</h2>
-        <pre style="color:var(--text-secondary);font-size:0.8rem;overflow-x:auto;">
-  HighLink/
-  ├── engine/              ML Pipeline (YOLO11 + ByteTrack + 2-stage)
-  │   ├── detection/       VehicleDetector + EfficientNet classifier
-  │   ├── rules/           F1(wrong_way) + F2(direction) + F3(pedestrian)
-  │   ├── ingest/          ITS CCTV client + FFmpeg decoder
-  │   ├── api/             FastAPI REST + gRPC + WebSocket
-  │   └── core/            Config + Event + Database (PostgreSQL)
-  ├── app/streamlit/       Demo UI (Mode A: upload, Mode C: real-time)
-  │   └── stream_server.py MJPEG server (port 8502) ← CORS issue here
-  ├── data/test_videos/    3 test scenarios (F1/F2/F3)
-  └── docs/requests/       13 work directives (Mac ↔ Company PC workflow)
-        </pre>
-      </div>
+      <div id="doc-list"></div>
     </div>
 
-    <!-- P1 Diagnostic -->
-    <div id="diag-p1" class="diag-panel" style="display:none">
-      <div class="grid-2">
-        <div class="panel">
-          <h2>P1 SEOULINK KOREAN CLASS</h2>
-          <div class="stat-row"><span class="stat-label">Purpose</span><span class="stat-value cyan">Korean Language Learning Ecosystem</span></div>
-          <div class="stat-row"><span class="stat-label">Phase</span><span class="stat-value">Advanced Beta</span></div>
-          <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">19 (P1.1wc~P1.19wc)</span></div>
-          <div class="stat-row"><span class="stat-label">REQs</span><span class="stat-value">67 tracked</span></div>
-          <div class="stat-row"><span class="stat-label">Size</span><span class="stat-value warn">~1.7 GB</span></div>
-          <div class="stat-row"><span class="stat-label">Components</span><span class="stat-value">3 apps + Python tools</span></div>
-          <div class="diag-tech">
-            <span class="diag-tag">Phaser 3.60</span>
-            <span class="diag-tag">Vite 6</span>
-            <span class="diag-tag">Firebase</span>
-            <span class="diag-tag">PDF.js</span>
-            <span class="diag-tag">Cloudflare Pages</span>
-            <span class="diag-tag">Python</span>
-          </div>
-        </div>
-        <div class="panel">
-          <h2>3 APPLICATION MODULES</h2>
-          <div class="diag-feature"><span class="check">&#10003;</span> KoreanClassGame: Phaser RPG (30 scenes, Seoul+Fukuoka)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> PDF Textbook Viewer: 11 books, copyright protection</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Web Textbooks: L1~L11 HTML + Storybook (10 chapters)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Teacher Guides: 11 HTML guides</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Traceability System: 1,230+ dialogue IDs mapped</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Illustrations: L1~L6 (60 images) + 11 covers + 9 characters</div>
-          <div class="diag-feature"><span class="pending">&#9679;</span> Firebase Auth: OAuth buttons exist, signIn bug</div>
-          <div class="diag-feature"><span class="missing">&#10007;</span> L7~L11 illustrations (~40-50 needed)</div>
-          <div class="diag-feature"><span class="missing">&#10007;</span> L3~L8 game content data</div>
-        </div>
+    <!-- Right: viewer -->
+    <div class="doc-viewer" id="doc-viewer">
+      <div class="viewer-placeholder">
+        <div class="icon">◫</div>
+        <div>문서를 선택하면 여기에 표시됩니다</div>
+        <div style="font-size:10px;color:var(--text-meta)">총 <span id="total-docs">—</span>개 문서</div>
       </div>
-      <div class="panel">
-        <h2>ARCHITECTURE</h2>
-        <pre style="color:var(--text-secondary);font-size:0.8rem;overflow-x:auto;">
-  SeouLink/한국어교실/
-  ├── KoreanClassGame/          Phaser RPG (187MB)
-  │   └── src/scenes/           30+ scene classes (Seoul + Fukuoka maps)
-  ├── annyeong-seoul-textbook/  PDF Viewer (602MB, 11 books)
-  │   └── src/                  Firebase Auth + copyright guard + watermark
-  ├── web_textbooks/            HTML Textbook + Storybook (906MB)
-  │   ├── L1~L11_*.html         11 student textbooks + 11 teacher guides
-  │   └── storybook/            10 chapters + traceability.json (1,230+ IDs)
-  ├── illustrations/            262 files (covers, titles, characters, scenes)
-  └── [25+ Python scripts]      Textbook generation, illustration batch, QA
-        </pre>
-      </div>
-    </div>
-
-    <!-- P2 Diagnostic -->
-    <div id="diag-p2" class="diag-panel" style="display:none">
-      <div class="grid-2">
-        <div class="panel">
-          <h2>P2 GEANT4 SHIELDDOSE</h2>
-          <div class="stat-row"><span class="stat-label">Purpose</span><span class="stat-value cyan">Radiation Shielding Simulation</span></div>
-          <div class="stat-row"><span class="stat-label">Phase</span><span class="stat-value">Phase 3+ (GUI v3)</span></div>
-          <div class="stat-row"><span class="stat-label">Sessions</span><span class="stat-value">16 (P2.1wc~P2.16wc)</span></div>
-          <div class="stat-row"><span class="stat-label">ISS Tracked</span><span class="stat-value warn">104 (89.4% resolved)</span></div>
-          <div class="stat-row"><span class="stat-label">LT Roadmap</span><span class="stat-value">7/26 completed</span></div>
-          <div class="stat-row"><span class="stat-label">Nuclides</span><span class="stat-value">6+1 validated</span></div>
-          <div class="diag-tech">
-            <span class="diag-tag">GEANT4 11.1.2</span>
-            <span class="diag-tag">C++17</span>
-            <span class="diag-tag">Qt5 GUI</span>
-            <span class="diag-tag">CMake</span>
-            <span class="diag-tag">ICRP-74</span>
-            <span class="diag-tag">ByteTrack</span>
-          </div>
-        </div>
-        <div class="panel">
-          <h2>CAPABILITIES</h2>
-          <div class="diag-feature"><span class="check">&#10003;</span> 6+1 nuclides (Co-60, Cs-137, Ir-192, Se-75, I-131, Tc-99m, Cf-252)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> H*(10) ambient dose equivalent (ICRP-74)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> 57 material library + custom materials</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> N-layer slab + STL geometry import</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Shield design optimizer (inverse problem)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Buildup factor (ANS 6.4.3)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Cf-252 neutron (Watt spectrum, multiplicity)</div>
-          <div class="diag-feature"><span class="check">&#10003;</span> Dashboard v3 (GitHub Pages)</div>
-          <div class="diag-feature"><span class="pending">&#9679;</span> 3D trajectory visualization (LT-05 Ph2)</div>
-          <div class="diag-feature"><span class="missing">&#10007;</span> MT parallel computing (ISS-037 blocker)</div>
-        </div>
-      </div>
-      <div class="panel">
-        <h2>LT ROADMAP (7/26)</h2>
-        <div class="progress-bar"><div class="progress-fill" style="width:27%;background:var(--hobis-cyan)"></div></div>
-        <div style="font-size:0.8rem;color:var(--text-meta);margin-bottom:10px">7 completed / 19 planned</div>
-        <table class="req-table">
-          <tr><th>LT</th><th>Task</th><th>Status</th></tr>
-          <tr><td>LT-04</td><td>Cf-252 neutron (Phase 1+2)</td><td style="color:var(--hobis-green)">DONE</td></tr>
-          <tr><td>LT-05</td><td>Scatter tracking (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
-          <tr><td>LT-06</td><td>Complex geometry / STL (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
-          <tr><td>LT-09</td><td>Dose evaluation / buildup (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
-          <tr><td>LT-13</td><td>Visualization / SVG (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
-          <tr><td>LT-14</td><td>Shield design optimizer (Phase 1)</td><td style="color:var(--hobis-green)">DONE</td></tr>
-          <tr><td>LT-21</td><td>Material freedom (Phase 1~5)</td><td style="color:var(--hobis-green)">DONE</td></tr>
-          <tr><td>LT-01</td><td>Secondary radiation</td><td style="color:var(--text-meta)">PLANNED</td></tr>
-          <tr><td>LT-07</td><td>Electron/beta shielding</td><td style="color:var(--text-meta)">PLANNED</td></tr>
-          <tr><td>LT-12</td><td>Parallel computing (MT/MPI)</td><td style="color:var(--hobis-warn)">BLOCKED (ISS-037)</td></tr>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== REQ/ISS TAB ===== -->
-  <div id="tab-req" class="tab-content">
-    <div class="panel">
-      <h2>REQ/ISS DISTRIBUTION</h2>
-      <div id="reqChart"></div>
-    </div>
-    <div class="panel">
-      <h2>OPEN BLOCKERS</h2>
-      <table class="req-table">
-        <tr><th>Project</th><th>ID</th><th>Description</th><th>Type</th></tr>
-        <tr><td style="color:var(--hobis-cyan)">P18</td><td>P18.4wc-ISS-001</td><td>MJPEG cross-origin (CF Tunnel)</td><td><span class="status yellow"></span>ISS</td></tr>
-        <tr><td style="color:var(--hobis-cyan)">P17</td><td>—</td><td>Tequila API key not obtained</td><td><span class="status red"></span>BLOCKER</td></tr>
-        <tr><td style="color:var(--hobis-cyan)">P16</td><td>—</td><td>Whisper not installed + LUT files missing</td><td><span class="status red"></span>BLOCKER</td></tr>
-        <tr><td style="color:var(--hobis-cyan)">P6</td><td>—</td><td>Upbit API key not obtained</td><td><span class="status red"></span>BLOCKER</td></tr>
-        <tr><td style="color:var(--hobis-cyan)">P2</td><td>ISS-037</td><td>Serial mode forced (MT+VR incompatible)</td><td><span class="status red"></span>ISS</td></tr>
-        <tr><td style="color:var(--hobis-cyan)">T</td><td>T1.8wc-ISS-001</td><td>Session sync intermittent failure</td><td><span class="status yellow"></span>ISS</td></tr>
-      </table>
-    </div>
-  </div>
-
-  <!-- ===== PRIORITIES TAB ===== -->
-  <div id="tab-priorities" class="tab-content">
-    <div class="panel">
-      <h2>PRIORITY STACK</h2>
-      <div id="priorityChart"></div>
-    </div>
-    <div class="panel">
-      <h2>URGENT TASKS (User Designated)</h2>
-      <table class="req-table">
-        <tr><th>Project</th><th>Next Action</th><th>Blocker</th></tr>
-        <tr><td style="color:var(--hobis-green)">P18 HighLink</td><td>Resolve MJPEG CORS → F3 test → Event UI</td><td style="color:var(--hobis-warn)">ISS-001</td></tr>
-        <tr><td style="color:var(--hobis-green)">P14 3DLink</td><td>Constraint solver + Multi-sketch + iPad test</td><td>None</td></tr>
-        <tr><td style="color:var(--hobis-green)">P1 Korean Class</td><td>Firebase Auth fix + L7~L11 illustrations</td><td style="color:var(--hobis-warn)">signIn bug</td></tr>
-        <tr><td style="color:var(--hobis-green)">P2 GEANT4</td><td>P2.16wc continuation (LT roadmap)</td><td style="color:var(--hobis-warn)">GEANT4 build env</td></tr>
-        <tr><td style="color:var(--hobis-cyan)">P16 CineLink</td><td>Waiting for video source material</td><td style="color:var(--hobis-alert)">User action needed</td></tr>
-      </table>
     </div>
   </div>
 </div>
 
 <script>
-// Project data
-const projects = [
-  {id:'P18',name:'HighLink',tier:'T1',phase:'Ph.1',sessions:4,health:4,purpose:'Highway AI Surveillance (SL Corp)',tech:'YOLO11, Streamlit, FastAPI, Docker',openReq:6,openIss:1,lastActivity:'04-10'},
-  {id:'P14',name:'3DLink',tier:'T1',phase:'MVP',sessions:6,health:2,purpose:'iPad 3D CAD Modeling',tech:'Swift, Metal, OpenCASCADE',openReq:7,openIss:0,lastActivity:'03-27'},
-  {id:'P1',name:'SeouLink Korean Class',tier:'T1',phase:'Beta',sessions:19,health:3,purpose:'Korean Language Learning Ecosystem',tech:'Phaser, Firebase, PDF.js, Cloudflare',openReq:67,openIss:0,lastActivity:'04-11'},
-  {id:'P2',name:'GEANT4 ShieldDose',tier:'T1',phase:'Ph.3+',sessions:16,health:3,purpose:'Radiation Shielding Simulation',tech:'GEANT4, C++17, Qt5, CMake',openReq:18,openIss:11,lastActivity:'04-01'},
-  {id:'P16',name:'CineLink',tier:'T1',phase:'Initial',sessions:3,health:2,purpose:'Video Production Pipeline',tech:'FFmpeg, Whisper, Python',openReq:9,openIss:1,lastActivity:'04-10'},
-  {id:'P11',name:'MarkLink SL',tier:'T1',phase:'Ph.2+',sessions:49,health:4,purpose:'Office Suite (10 Editors)',tech:'Vanilla JS, Vite 8, Vitest 4',openReq:6,openIss:0,lastActivity:'03-28'},
-  {id:'P12',name:'HOBIS Cf-252',tier:'T2',phase:'Ph.1',sessions:10,health:4,purpose:'Dose Assessment Calculator',tech:'HTML/JS, HOBIS Design',openReq:9,openIss:0,lastActivity:'04-11'},
-  {id:'P3',name:'TripLink SL',tier:'T2',phase:'Operating',sessions:28,health:3,purpose:'Travel Guide Service',tech:'React, Vite, Leaflet',openReq:50,openIss:0,lastActivity:'Active'},
-  {id:'P15',name:'AOMORI',tier:'T2',phase:'Research',sessions:28,health:4,purpose:'TripLink Content Pipeline',tech:'HTML/JS, Python',openReq:3,openIss:0,lastActivity:'Active'},
-  {id:'P10',name:'Hodlum',tier:'T2',phase:'Deploy',sessions:17,health:3,purpose:'Ludlum 3030 Custom Logger',tech:'Electron, C++, Windows',openReq:12,openIss:0,lastActivity:'Active'},
-  {id:'P17',name:'Flight',tier:'T3',phase:'Initial',sessions:2,health:2,purpose:'Flight Comprehensive Service',tech:'Python, FastAPI, PostgreSQL',openReq:9,openIss:0,lastActivity:'04-10'},
-  {id:'P13',name:'PhotoLink',tier:'T3',phase:'Ph.3',sessions:3,health:2,purpose:'Web Photo Editor',tech:'HTML Canvas, JS',openReq:5,openIss:0,lastActivity:'03-22'},
-  {id:'P6',name:'DL Trading',tier:'T4',phase:'Ph.1',sessions:1,health:1,purpose:'Crypto Trading Bot',tech:'Python, Upbit API',openReq:2,openIss:0,lastActivity:'03-15'},
-  {id:'P7',name:'DWVA',tier:'T4',phase:'Ph.1',sessions:1,health:1,purpose:'Deep Web Vulnerability Assessment',tech:'Python, Docker',openReq:2,openIss:0,lastActivity:'03-15'},
-  {id:'P8',name:'Claude Remote',tier:'T4',phase:'Planning',sessions:1,health:1,purpose:'Telegram Bot (Remote Claude)',tech:'Python, Telegram API',openReq:3,openIss:0,lastActivity:'03-15'},
-  {id:'P4',name:'LingoPlay SL',tier:'T4',phase:'—',sessions:1,health:0,purpose:'YouTube Language Class',tech:'—',openReq:0,openIss:0,lastActivity:'—'},
-  {id:'P5',name:'Home (System)',tier:'T4',phase:'—',sessions:2,health:0,purpose:'System Administration',tech:'macOS, Shell',openReq:1,openIss:0,lastActivity:'—'},
-  {id:'P9',name:'MarkLink (Doc)',tier:'T4',phase:'Ph.1',sessions:1,health:1,purpose:'Document Editor (Legacy)',tech:'—',openReq:4,openIss:0,lastActivity:'—'},
-];
+// ── EMBEDDED DATA ──
+const DATA = {"last_updated":"2026-04-16T03:00:00","projects":[{"id":"P06_DLTrading","p_num":"P06","name":"DL Trading","desc":"DL Trading System 자동매매","status":"archived","docs":[{"ts":"2026-03-15 18:50","title":"DL Trading System 기획서","file":"P06_DLTrading/20260315_185000_DL_Trading_System_기획서.md","tags":["기획"]}]},{"id":"P07_DWVA","p_num":"P07","name":"DWVA","desc":"DWVA 보안 취약점 분석 시뮬레이터","status":"archived","docs":[{"ts":"2026-03-15 20:55","title":"DWVA 시뮬레이터 기획서","file":"P07_DWVA/20260315_205500_DWVA_시뮬레이터_기획서.md","tags":["기획"]}]},{"id":"P08_ClaudeRemote","p_num":"P08","name":"Claude Remote","desc":"텔레그램 봇 기반 원격 Claude 제어","status":"archived","docs":[{"ts":"2026-03-15 20:53","title":"텔레그램 봇 스펙","file":"P08_ClaudeRemote/20260315_205300_Claude_Remote_텔레그램봇_스펙.md","tags":["스펙"]}]},{"id":"P10_Hodlum","p_num":"P10","name":"Hodlum","desc":"Ludlum 3030-2 커스텀 로깅 S/W","status":"active","docs":[{"ts":"2026-03-18 15:30","title":"MOM-001 Ludlum 3030-2 운용분석 및 커스텀로깅 기획","file":"P10_Hodlum/20260318_153000_MOM-001_Ludlum_3030-2_운용분석_및_커스텀로깅_기획.md","tags":["기획"]},{"ts":"2026-03-18 15:30","title":"WO-001 Ludlum 3030-2 커스텀 로깅 소프트웨어 작업지시서","file":"P10_Hodlum/20260318_153000_WO-001_Ludlum_3030-2_커스텀_로깅_소프트웨어_작업지시서.md","tags":["작업지시"]},{"ts":"2026-03-18 14:53","title":"WR-001 Phase1 작업결과보고서","file":"P10_Hodlum/20260318_145351_WR-001_P10.1wc_Ludlum_3030-2_커스텀_로깅_소프트웨어_Phase1_작업결과보고서.md","tags":["결과보고"]}]},{"id":"P11_MarketLink","p_num":"P11","name":"MarketLink","desc":"시장 분석 서비스","status":"archived","docs":[{"ts":"2026-03-16 18:13","title":"MarketLink 프로젝트 기획서 v3","file":"P11_MarketLink/20260316_181300_MarketLink_프로젝트_기획서_v3.md","tags":["기획"]}]},{"id":"P12_HOBIS","p_num":"P12","name":"HOBIS Cf-252","desc":"Cf-252 선량평가 계산기","status":"active","docs":[{"ts":"2026-03-10 16:04","title":"HOBIS v6 Sprint1 Plan","file":"P12_HOBIS/20260310_160439_HOBIS_v6_Sprint1_Plan.md","tags":["계획"]},{"ts":"2026-03-10 18:25","title":"HOBIS v6 Phase1 Sprint1 완료보고","file":"P12_HOBIS/20260310_182538_HOBIS_v6_Phase1_Sprint1_완료보고.md","tags":["결과보고"]},{"ts":"2026-03-13 12:00","title":"HOBIS v6 Phase1 Sprint2 완료보고","file":"P12_HOBIS/20260313_120000_HOBIS_v6_Phase1_Sprint2_완료보고.md","tags":["결과보고"]},{"ts":"2026-03-20 18:19","title":"Cf252 선량평가 계산기 지침서","file":"P12_HOBIS/20260320_181900_Cf252_선량평가_계산기_지침서.md","tags":["지침"]}]},{"id":"P13_PhotoLink","p_num":"P13","name":"PhotoLink","desc":"웹 사진 편집기","status":"archived","docs":[{"ts":"2026-03-22 00:45","title":"PhotoLink 웹 사진편집기 스펙","file":"P13_PhotoLink/20260322_004500_PhotoLink_웹사진편집기_스펙.md","tags":["스펙"]}]},{"id":"P15_AOMORI","p_num":"P15","name":"AOMORI","desc":"아오모리 현지인 여행 가이드","status":"done","docs":[{"ts":"2026-03-28 16:38","title":"Live Like a Local 가이드","file":"P15_AOMORI/20260328_163450_아오모리_Live_Like_a_Local_가이드.md","tags":["가이드"]},{"ts":"2026-03-28 16:40","title":"아오모리 현지인 여행 계획서","file":"P15_AOMORI/20260328_163851_아오모리_현지인여행_계획서.md","tags":["계획"]},{"ts":"2026-03-30 09:03","title":"아오모리 쇼핑 리서치","file":"P15_AOMORI/20260330_090335_아오모리_쇼핑_리서치.md","tags":["리서치"]},{"ts":"2026-03-31 13:35","title":"아오모리 현지인체험 딥다이브 리서치","file":"P15_AOMORI/20260331_133506_아오모리_현지인체험_딥다이브_리서치.md","tags":["리서치"]}]},{"id":"P16_CineLink","p_num":"P16","name":"CineLink","desc":"AI 영상 제작 파이프라인","status":"active","docs":[{"ts":"2026-04-08 16:28","title":"Claude Code 영상 파이프라인 가이드","file":"P16_CineLink/20260408_162800_CineLink_Claude_Code_영상파이프라인_가이드.md","tags":["가이드"]},{"ts":"2026-04-08 18:34","title":"CineLink 브랜드 가이드","file":"P16_CineLink/20260408_183400_CineLink_브랜드_가이드.md","tags":["브랜드"]}]},{"id":"P17_Flight","p_num":"P17","name":"Flight","desc":"항공권 종합 서비스","status":"archived","docs":[{"ts":"2026-04-10 11:45","title":"항공권 서비스 기획서","file":"P17_Flight/20260410_114500_항공권_서비스_기획서.md","tags":["기획"]},{"ts":"2026-04-10 11:46","title":"구현 계획서","file":"P17_Flight/20260410_114500_구현계획서.md","tags":["계획"]}]},{"id":"P18_HighLink","p_num":"P18","name":"HighLink","desc":"고속도로 AI 관제 시스템","status":"active","docs":[{"ts":"2026-04-10 17:05","title":"HighLink 고속도로 AI 관제 프로젝트","file":"P18_HighLink/20260410_170500_P18_HighLink_고속도로_AI관제_프로젝트.md","tags":["기획"]},{"ts":"2026-04-10 17:56","title":"GPU 벤치마크 평가의뢰서","file":"P18_HighLink/20260410_175639_GPU_벤치마크_평가의뢰서.md","tags":["의뢰"]},{"ts":"2026-04-10 18:15","title":"GPU 벤치마크 결과보고서","file":"P18_HighLink/20260410_181500_GPU_벤치마크_결과보고서.md","tags":["보고"]},{"ts":"2026-04-10 18:32","title":"데모영상 생성의뢰서","file":"P18_HighLink/20260410_183257_데모영상_생성의뢰서.md","tags":["의뢰"]},{"ts":"2026-04-10 18:44","title":"Streamlit 데모서버 작업지시서","file":"P18_HighLink/20260410_184420_Streamlit_데모서버_작업지시서.md","tags":["작업지시"]},{"ts":"2026-04-10 18:45","title":"데모영상 결과보고서","file":"P18_HighLink/20260410_184500_데모영상_결과보고서.md","tags":["보고"]},{"ts":"2026-04-10 18:56","title":"Streamlit 데모서버 결과보고서","file":"P18_HighLink/20260410_185600_Streamlit_데모서버_결과보고서.md","tags":["보고"]},{"ts":"2026-04-10 19:17","title":"Phase1 2단계 분류기 데모영상 의뢰서","file":"P18_HighLink/20260410_191749_Phase1_2단계분류기_데모영상_의뢰서.md","tags":["의뢰"]},{"ts":"2026-04-10 19:37","title":"Phase1 2단계 분류기 결과보고서","file":"P18_HighLink/20260410_193700_Phase1_2단계분류기_결과보고서.md","tags":["보고"]}]},{"id":"P21_FEP","p_num":"P21","name":"FEP","desc":"일상속 경험의 심리학 — 유튜브 채널","status":"active","docs":[{"ts":"2026-04-12 13:42","title":"EP01 제작계획서","file":"P21_FEP/20260412_134228_FEP_EP01_제작계획서.md","tags":["기획"]},{"ts":"2026-04-12 14:01","title":"EP01 타이밍 매니페스트","file":"P21_FEP/20260412_140103_EP01_타이밍_매니페스트.md","tags":["계획"]},{"ts":"2026-04-12 23:01","title":"EP01 교훈집","file":"P21_FEP/20260412_230139_EP01_교훈집.md","tags":["교훈"]},{"ts":"2026-04-13 07:06","title":"EP01 Typecast TTS 사용가이드","file":"P21_FEP/20260413_070625_EP01_Typecast_TTS_사용가이드.md","tags":["가이드"]},{"ts":"2026-04-13 07:19","title":"EP01 쇼츠 v2 1분심리학 컨셉초안","file":"P21_FEP/20260413_071939_EP01_쇼츠v2_1분심리학_컨셉초안.md","tags":["각본"]},{"ts":"2026-04-13 07:56","title":"EP01 시네마틱 각본 v2","file":"P21_FEP/20260413_075604_EP01_시네마틱_각본.md","tags":["각본"]},{"ts":"2026-04-13 09:52","title":"EP01 BGM/SFX 설계","file":"P21_FEP/20260413_095251_EP01_BGM_SFX_설계.md","tags":["설계"]},{"ts":"2026-04-13 09:52","title":"EP01 쇼츠 v2 각본","file":"P21_FEP/20260413_095251_EP01_쇼츠v2_각본.md","tags":["각본"]},{"ts":"2026-04-13 21:06","title":"EP01 LP 멀티캐릭터 오버레이 설계","file":"P21_FEP/20260413_210644_EP01_LP_멀티캐릭터_오버레이_설계.md","tags":["설계"]},{"ts":"2026-04-13 21:06","title":"EP01 BGM 후보 매칭리스트","file":"P21_FEP/20260413_210651_EP01_BGM_후보_매칭리스트.md","tags":["리서치"]},{"ts":"2026-04-14 12:40","title":"FEP 유튜브 채널 운용전략","file":"P21_FEP/20260414_124053_FEP_유튜브채널_운용전략.md","tags":["전략"]},{"ts":"2026-04-14 12:40","title":"EP02 작업지시서 — 산만함의 심리학","file":"P21_FEP/20260414_124058_EP02_작업지시서_산만함의심리학.md","tags":["작업지시"]},{"ts":"2026-04-14 12:41","title":"EP02 작업지시서 — 읽씹의 심리학","file":"P21_FEP/20260414_124101_EP02_작업지시서_읽씹의심리학.md","tags":["작업지시"]},{"ts":"2026-04-14 12:41","title":"EP01 작업지시서 — 강요된 칭찬의 심리학","file":"P21_FEP/20260414_124102_EP01_작업지시서_강요된칭찬의심리학.md","tags":["작업지시"]},{"ts":"2026-04-15 09:23","title":"FEP 영상제작 TRAP 관리시스템","file":"P21_FEP/20260415_092337_FEP_영상제작_TRAP_관리시스템.md","tags":["교훈"]},{"ts":"2026-04-15 09:32","title":"P22 Flash MOE 전략 의견서","file":"P21_FEP/20260415_092844_P22_Flash_MOE_의견서.md","tags":["의견"]}]},{"id":"P22_FlashMOE","p_num":"P22","name":"FlashMOE","desc":"SL Flash MOE 전략","status":"active","docs":[{"ts":"2026-04-11 10:19","title":"SL 보안교훈 기반 프로젝트 운영계획 재설정","file":"P22_FlashMOE/20260411_101902_SL_보안교훈_기반_프로젝트_운영계획_재설정.md","tags":["계획"]},{"ts":"2026-04-15 09:43","title":"FlashMOE 종합전략 계획안","file":"P22_FlashMOE/20260415_094337_FlashMOE_종합전략_계획안.md","tags":["전략"]}]},{"id":"sessions","p_num":"SYS","name":"세션 기록","desc":"브리핑 채팅창 작업 세션 기록","status":"active","docs":[{"ts":"2026-04-16 00:00","title":"브리핑 채팅창 작업 세션 기록 (2026-04-16)","file":"sessions/20260416_000000_브리핑채팅_작업세션_기록.md","tags":["세션"]}]}]};
 
-const tierColors = {T1:'var(--hobis-green)',T2:'var(--hobis-cyan)',T3:'var(--hobis-warn)',T4:'#5f7481'};
+// ── STATE ──
+let selectedProjId = null;
+let selectedDocIdx = null;
+let allFlatDocs = []; // {projId, doc, globalIdx}
 
-function renderProjects(filter='all', search='') {
-  const list = document.getElementById('projectList');
-  list.innerHTML = '';
-  const s = search.toLowerCase();
-  projects.filter(p => {
-    if(filter!=='all' && p.tier!==filter) return false;
-    if(s && !p.name.toLowerCase().includes(s) && !p.id.toLowerCase().includes(s) && !p.purpose.toLowerCase().includes(s)) return false;
-    return true;
-  }).forEach(p => {
-    const healthDots = Array(5).fill(0).map((_,i) =>
-      `<span style="display:inline-block;width:8px;height:8px;border-radius:50;margin:0 1px;background:${i<p.health?'var(--hobis-green)':'#2a3b47'};${i<p.health?'box-shadow:0 0 4px var(--hobis-green)':''}"></span>`
-    ).join('');
-    list.innerHTML += `
-      <div class="project-card" data-tier="${p.tier}" onclick="this.classList.toggle('expanded')">
-        <div class="card-header">
-          <div>
-            <span style="color:${tierColors[p.tier]};font-size:0.75rem;margin-right:8px">${p.id}</span>
-            <span class="card-title" style="color:${tierColors[p.tier]}">${p.name}</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:10px;">
-            <span class="card-badge" style="color:${tierColors[p.tier]}">${p.tier}</span>
-            <span class="card-badge">${p.phase}</span>
-            <span style="font-size:0.7rem">${healthDots}</span>
-          </div>
-        </div>
-        <div class="card-detail">
-          <table>
-            <tr><td>Purpose</td><td>${p.purpose}</td></tr>
-            <tr><td>Tech Stack</td><td><div class="diag-tech">${p.tech.split(', ').map(t=>'<span class="diag-tag">'+t+'</span>').join('')}</div></td></tr>
-            <tr><td>Sessions</td><td>${p.sessions}</td></tr>
-            <tr><td>Open REQ</td><td style="color:${p.openReq>5?'var(--hobis-warn)':'var(--hobis-green)'}">${p.openReq}</td></tr>
-            <tr><td>Open ISS</td><td style="color:${p.openIss>0?'var(--hobis-warn)':'var(--hobis-green)'}">${p.openIss}</td></tr>
-            <tr><td>Last Activity</td><td>${p.lastActivity}</td></tr>
-          </table>
-        </div>
-      </div>`;
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('updated-ts').textContent = '업데이트: ' + DATA.last_updated.replace('T',' ').slice(0,16);
+  buildFlatDocs();
+  document.getElementById('total-docs').textContent = allFlatDocs.length;
+  renderOverview();
+  renderSidebar();
+});
+
+function buildFlatDocs() {
+  allFlatDocs = [];
+  DATA.projects.forEach(p => {
+    p.docs.forEach(d => {
+      allFlatDocs.push({projId: p.id, proj: p, doc: d});
+    });
   });
 }
 
+// ── TAB SWITCH ──
 function switchTab(name) {
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   event.target.classList.add('active');
-  if(name==='req') renderReqChart();
-  if(name==='priorities') renderPriorityChart();
+  document.getElementById('view-' + name).classList.add('active');
 }
 
-function filterTier(tier, btn) {
-  document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderProjects(tier, document.getElementById('projectSearch').value);
-}
+// ── OVERVIEW ──
+function renderOverview() {
+  const active = DATA.projects.filter(p => p.status === 'active');
+  const other = DATA.projects.filter(p => p.status !== 'active');
+  const totalDocs = DATA.projects.reduce((s,p) => s + p.docs.length, 0);
 
-function filterProjects() {
-  const activeFilter = document.querySelector('.filter-bar .filter-btn.active');
-  const tier = activeFilter ? activeFilter.textContent.split(' ')[0] : 'ALL';
-  renderProjects(tier==='ALL'?'all':tier, document.getElementById('projectSearch').value);
-}
-
-function switchDiag(id, btn) {
-  document.querySelectorAll('.diag-panel').forEach(el => el.style.display='none');
-  document.querySelectorAll('#tab-diagnostics .filter-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('diag-'+id).style.display='block';
-  btn.classList.add('active');
-}
-
-function renderReqChart() {
-  const data = [
-    {name:'P3 TripLink',total:50,open:14,color:'#00f7ff'},
-    {name:'P1 Korean',total:67,open:30,color:'#00ff33'},
-    {name:'P2 GEANT4',total:18,open:11,color:'#ffcc00'},
-    {name:'P11 MarkLink',total:49,open:6,color:'#a064ff'},
-    {name:'P10 Hodlum',total:22,open:12,color:'#ff3300'},
-    {name:'P18 HighLink',total:6,open:6,color:'#ff64c8'},
-    {name:'P12 HOBIS',total:9,open:9,color:'#ff9933'},
-    {name:'P16 CineLink',total:9,open:6,color:'#33ccff'},
-    {name:'P17 Flight',total:9,open:5,color:'#00f7ff'},
-    {name:'P14 3DLink',total:7,open:7,color:'#00ff33'},
-    {name:'P13 PhotoLink',total:5,open:5,color:'#ffcc00'},
-    {name:'P15 AOMORI',total:3,open:3,color:'#a064ff'},
-  ];
-  const maxTotal = Math.max(...data.map(d=>d.total));
-  const chart = document.getElementById('reqChart');
-  chart.innerHTML = data.map(d => `
-    <div style="display:flex;align-items:center;gap:10px;margin:6px 0;">
-      <div style="width:120px;font-size:0.75rem;color:${d.color};text-align:right;flex-shrink:0">${d.name}</div>
-      <div style="flex:1;position:relative;height:16px;background:rgba(255,255,255,0.03);border-radius:3px;overflow:hidden;">
-        <div style="position:absolute;height:100%;width:${d.total/maxTotal*100}%;background:rgba(${hexToRgb(d.color)},0.15);border-radius:3px;"></div>
-        <div style="position:absolute;height:100%;width:${d.open/maxTotal*100}%;background:rgba(${hexToRgb(d.color)},0.4);border-radius:3px;"></div>
-      </div>
-      <div style="width:80px;font-size:0.75rem;color:var(--text-meta);flex-shrink:0">${d.open}/${d.total} open</div>
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-val">${DATA.projects.length}</div>
+      <div class="stat-label">전체 프로젝트</div>
     </div>
-  `).join('');
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--green);text-shadow:0 0 10px var(--green)">${active.length}</div>
+      <div class="stat-label">활성 프로젝트</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val">${totalDocs}</div>
+      <div class="stat-label">전체 문서</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" style="color:var(--warn);text-shadow:0 0 10px var(--warn)">${other.filter(p=>p.status==='archived').length}</div>
+      <div class="stat-label">아카이브</div>
+    </div>
+  `;
+
+  document.getElementById('grid-active').innerHTML = active.map(p => projCard(p)).join('');
+  document.getElementById('grid-other').innerHTML = other.map(p => projCard(p)).join('');
 }
 
-function renderPriorityChart() {
-  const chart = document.getElementById('priorityChart');
-  const tiers = [
-    {tier:'T1',label:'FOCUS',color:'var(--hobis-green)',projects:['P18 HighLink','P14 3DLink','P1 Korean','P2 GEANT4','P16 CineLink*','P11 MarkLink']},
-    {tier:'T2',label:'MAINTAIN',color:'var(--hobis-cyan)',projects:['P12 HOBIS','P3 TripLink','P15 AOMORI','P10 Hodlum']},
-    {tier:'T3',label:'STANDBY',color:'var(--hobis-warn)',projects:['P17 Flight','P13 PhotoLink']},
-    {tier:'T4',label:'DORMANT',color:'#5f7481',projects:['P6 DL Trading','P7 DWVA','P8 Claude Remote']},
-  ];
-  chart.innerHTML = tiers.map(t => `
-    <div style="margin:12px 0;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-        <span style="color:${t.color};font-family:Orbitron;font-size:0.85rem;width:30px">${t.tier}</span>
-        <span style="color:${t.color};font-size:0.75rem">${t.label}</span>
+function projCard(p) {
+  const statusLabel = {active:'ACTIVE', done:'DONE', archived:'ARCHIVED'}[p.status] || p.status;
+  const statusCls = {active:'status-active', done:'status-done', archived:'status-archived'}[p.status] || 'status-archived';
+  return `
+    <div class="proj-card" onclick="goToProject('${p.id}')">
+      <div class="proj-card-header">
+        <span class="proj-pnum">${p.p_num}</span>
+        <span class="proj-status ${statusCls}">${statusLabel}</span>
       </div>
-      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-left:40px;">
-        ${t.projects.map(p => `<span style="padding:4px 10px;border:1px solid ${t.color};border-radius:3px;font-size:0.75rem;color:${t.color};background:rgba(${t.color==='var(--hobis-green)'?'0,255,51':t.color==='var(--hobis-cyan)'?'0,247,255':t.color==='var(--hobis-warn)'?'255,204,0':'95,116,129'},0.1)">${p}</span>`).join('')}
+      <div class="proj-name">${p.name}</div>
+      <div class="proj-desc">${p.desc}</div>
+      <div class="proj-doc-count">문서 <span>${p.docs.length}</span>개</div>
+    </div>
+  `;
+}
+
+function goToProject(projId) {
+  // Switch to documents tab and select project
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', i===1));
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-documents').classList.add('active');
+  selectProject(projId);
+}
+
+// ── SIDEBAR ──
+function renderSidebar() {
+  const html = DATA.projects.map(p => `
+    <div class="sidebar-group">
+      <div class="sidebar-group-hdr" id="shdr-${p.id}" onclick="selectProject('${p.id}')">
+        <span><span class="pnum">${p.p_num}</span> ${p.name}</span>
+        <span class="cnt">${p.docs.length}</span>
       </div>
     </div>
   `).join('');
+  document.getElementById('doc-sidebar').innerHTML = html;
 }
 
-function hexToRgb(hex) {
-  hex = hex.replace('#','');
-  return [parseInt(hex.substr(0,2),16),parseInt(hex.substr(2,2),16),parseInt(hex.substr(4,2),16)].join(',');
+function selectProject(projId) {
+  selectedProjId = projId;
+  // Update sidebar highlight
+  document.querySelectorAll('.sidebar-group-hdr').forEach(el => el.classList.remove('active'));
+  const hdr = document.getElementById('shdr-' + projId);
+  if (hdr) hdr.classList.add('active');
+  // Render doc list
+  const proj = DATA.projects.find(p => p.id === projId);
+  if (!proj) return;
+  document.getElementById('doc-list-hdr').textContent = proj.p_num + ' ' + proj.name;
+  renderDocList(proj.docs, projId);
+  // Clear viewer
+  document.getElementById('doc-viewer').innerHTML = `<div class="viewer-placeholder"><div class="icon">◫</div><div>문서를 선택하세요</div></div>`;
+  selectedDocIdx = null;
 }
 
-// Init
-renderProjects();
+function renderDocList(docs, projId) {
+  if (!docs || docs.length === 0) {
+    document.getElementById('doc-list').innerHTML = '<div class="loading">문서 없음</div>';
+    return;
+  }
+  const sorted = [...docs].sort((a,b) => b.ts.localeCompare(a.ts));
+  const html = sorted.map((d, i) => `
+    <div class="doc-item" data-proj="${projId}" data-file="${escAttr(d.file)}" data-title="${escAttr(d.title)}">
+      <div class="doc-item-title">${esc(d.title)}</div>
+      <div class="doc-item-meta">
+        <span class="doc-item-ts">${d.ts}</span>
+        ${(d.tags||[]).map(t => `<span class="doc-tag">${esc(t)}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('doc-list').innerHTML = html;
+  // Attach listeners
+  document.querySelectorAll('#doc-list .doc-item').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#doc-list .doc-item').forEach(e => e.classList.remove('active'));
+      el.classList.add('active');
+      loadDoc(el.dataset.file, el.dataset.title);
+    });
+  });
+}
+
+function filterDocs() {
+  const q = document.getElementById('search-input').value.toLowerCase().trim();
+  if (!q) {
+    if (selectedProjId) {
+      const proj = DATA.projects.find(p => p.id === selectedProjId);
+      if (proj) renderDocList(proj.docs, selectedProjId);
+    }
+    return;
+  }
+  // Search across all projects
+  const results = [];
+  DATA.projects.forEach(p => {
+    p.docs.forEach(d => {
+      if (d.title.toLowerCase().includes(q) || (d.tags||[]).some(t=>t.includes(q)) || p.name.toLowerCase().includes(q)) {
+        results.push({...d, _projName: p.name, _projId: p.id});
+      }
+    });
+  });
+  document.getElementById('doc-list-hdr').textContent = `검색: "${q}" (${results.length}건)`;
+  if (!results.length) {
+    document.getElementById('doc-list').innerHTML = '<div class="loading">결과 없음</div>';
+    return;
+  }
+  const html = results.map(d => `
+    <div class="doc-item" data-proj="${d._projId}" data-file="${escAttr(d.file)}" data-title="${escAttr(d.title)}">
+      <div class="doc-item-title">${esc(d.title)}</div>
+      <div class="doc-item-meta">
+        <span class="doc-item-ts">${d.ts}</span>
+        <span class="doc-tag" style="color:var(--cyan);border-color:var(--cyan)">${esc(d._projName)}</span>
+        ${(d.tags||[]).map(t=>`<span class="doc-tag">${esc(t)}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('doc-list').innerHTML = html;
+  document.querySelectorAll('#doc-list .doc-item').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('#doc-list .doc-item').forEach(e => e.classList.remove('active'));
+      el.classList.add('active');
+      loadDoc(el.dataset.file, el.dataset.title);
+    });
+  });
+}
+
+// ── DOC LOADER ──
+async function loadDoc(file, title) {
+  const viewer = document.getElementById('doc-viewer');
+  viewer.innerHTML = '<div class="loading">로딩 중...</div>';
+  try {
+    const url = 'docs/' + file;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    viewer.innerHTML = `
+      <div class="viewer-hdr">
+        <h2>${esc(title)}</h2>
+        <div class="vmeta">${esc(file)}</div>
+      </div>
+      <div class="viewer-body">${renderMD(text)}</div>
+    `;
+  } catch(e) {
+    viewer.innerHTML = `<div class="fetch-err">⚠ 파일 로드 실패: ${e.message}<br><small>${file}</small></div>`;
+  }
+}
+
+// ── MARKDOWN RENDERER ──
+function renderMD(md) {
+  // Strip HTML comments (meta-headers)
+  md = md.replace(/<!--[\s\S]*?-->/g, '').trim();
+  const lines = md.split('\n');
+  let html = '';
+  let inPre = false;
+  let preContent = '';
+  let inTable = false;
+  let tableRows = '';
+
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const inline = s => s
+    .replace(/`([^`]+)`/g, (_, c) => `<code>${esc(c)}</code>`)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+    .replace(/- \[x\]/gi, '<span class="chk-done">✅</span>')
+    .replace(/- \[ \]/g, '<span class="chk-todo">☐</span>');
+
+  function flushTable() {
+    if (!inTable) return;
+    html += '<table>' + tableRows + '</table>';
+    tableRows = '';
+    inTable = false;
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    const line = raw;
+
+    if (line.startsWith('```')) {
+      if (!inPre) {
+        flushTable();
+        inPre = true;
+        preContent = '';
+      } else {
+        html += `<pre><code>${esc(preContent)}</code></pre>`;
+        inPre = false;
+      }
+      continue;
+    }
+    if (inPre) { preContent += raw + '\n'; continue; }
+
+    // Table row
+    if (line.trim().startsWith('|')) {
+      const cells = line.trim().split('|').filter((_,i2,a)=>i2>0&&i2<a.length-1);
+      const isSep = cells.every(c => /^[-: ]+$/.test(c));
+      if (isSep) { inTable = true; continue; }
+      if (!inTable && cells.length > 0) { inTable = true; }
+      const tag = (!inTable || tableRows === '') ? 'th' : 'td';
+      tableRows += '<tr>' + cells.map(c => `<${tag}>${inline(esc(c.trim()))}</${tag}>`).join('') + '</tr>';
+      continue;
+    } else {
+      flushTable();
+    }
+
+    if (!line.trim()) { html += '<br>'; continue; }
+    if (/^#{1} /.test(line)) { html += `<h1>${inline(esc(line.slice(2)))}</h1>`; continue; }
+    if (/^#{2} /.test(line)) { html += `<h2>${inline(esc(line.slice(3)))}</h2>`; continue; }
+    if (/^#{3} /.test(line)) { html += `<h3>${inline(esc(line.slice(4)))}</h3>`; continue; }
+    if (/^#{4} /.test(line)) { html += `<h4>${inline(esc(line.slice(5)))}</h4>`; continue; }
+    if (/^> /.test(line)) { html += `<blockquote>${inline(esc(line.slice(2)))}</blockquote>`; continue; }
+    if (/^---+$/.test(line.trim())) { html += '<hr>'; continue; }
+    if (/^[-*] \[[ x]\]/.test(line.trim())) {
+      const done = /\[x\]/i.test(line);
+      const txt = line.replace(/^[-*] \[[ x]\] ?/i,'');
+      html += `<p>${done?'<span class="chk-done">✅</span>':'<span class="chk-todo">☐</span>'} ${inline(esc(txt))}</p>`;
+      continue;
+    }
+    if (/^[-*] /.test(line.trim())) {
+      const indent = line.search(/\S/);
+      const txt = line.trim().slice(2);
+      html += `<p style="margin-left:${Math.min(indent,6)*8}px">• ${inline(esc(txt))}</p>`;
+      continue;
+    }
+    if (/^\d+\. /.test(line.trim())) {
+      const txt = line.trim().replace(/^\d+\. /,'');
+      html += `<p>· ${inline(esc(txt))}</p>`;
+      continue;
+    }
+    html += `<p>${inline(esc(line))}</p>`;
+  }
+  flushTable();
+  return html;
+}
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function escAttr(s) {
+  return (s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 </script>
 </body>
 </html>
