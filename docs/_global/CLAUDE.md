@@ -86,6 +86,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | `tool_optimization.md` | 도구별 토큰 소비 표, 파일 읽기 최적화 | 도구 사용 패턴 확인 시 |
 | `session_fork.md` | P번호 체계, 포크 프로토콜, REQ/ISS 추적, 세션 마무리 | 세션 포크/마무리/REQ/ISS 작업 시 |
 | `fork_cleanup_guide.md` | 포크 미준비 기존 세션 정리 절차 | "기존 세션 정리해줘" 지시 시 |
+| **`ai_limits_and_measurement.md`** ⚠️ | **AI 구조적 한계 + 반복 실수 패턴 금지 + 측정 기반 개선 원칙** | **멀티미디어/영상/오디오/타이밍/시각 품질 작업 필수** |
 
 **재사용 모듈** (`~/.claude/modules/`):
 | 파일 | 내용 | 로드 조건 |
@@ -130,6 +131,16 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 → **상세 (프로토콜, REQ/ISS 추적, 세션 마무리)**: `~/.claude/instructions/session_fork.md` 참조
 
 **⚠️ 필수: 새 세션 시작 시 `~/.claude/registries/{P번호}.md`를 읽고 세션번호를 부여하여 첫 응답에서 안내하라.**
+
+**⚠️ CWD 검증 절차 (PM.18 오부여 교훈, 2026-04-17 추가)**:
+1. CWD를 프로젝트 레지스트리 테이블의 경로와 **정확히 일치** 여부로 대조 (prefix 일치만으로 판단 금지)
+2. **완전 일치**: 해당 P번호 사용
+3. **하위 경로** (등록 프로젝트의 서브폴더이지만 그 자체는 미등록): 사용자에게 선택지 제시하고 답변 대기
+   - (a) 새 프로젝트로 등록 (다음 빈 P번호 부여)
+   - (b) 상위 {P번호}의 임시 작업공간으로 진행
+   - (c) 임시 세션 (번호 미부여)
+4. **부모 `.claude/CLAUDE.md`의 자동 로드는 범위 표식일 뿐 소속 확정이 아님** — CWD가 레지스트리 경로와 정확 일치할 때만 그 프로젝트 세션으로 간주
+5. 위반 사례: 2026-04-17 TEREV 폴더에서 세션 시작했으나 부모 PM 지침 자동 로드를 근거로 PM.18.1.0 오부여 → P25.1.1.0으로 소급 정정
 
 **채팅번호 할당 안전망 (타임스탬프 재확인)**: 새 채팅 개시 시 registry를 한 번 더 재read하여 max가 변했는지 확인. 변했으면 더 큰 값 사용. 동시 개시 채팅 간 경쟁 조건 최소화.
 
@@ -199,6 +210,9 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P20 | PMLink (모바일 PM 클라이언트) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/PMLink/` | 1 |
 | P21 | FEP (익숙한 경험의 심리학) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/FEP/` | 1 |
 | P22 | FlashMOE (회사의 3원소 — 1인 MOE 스택) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/FlashMOE/` | 1 |
+| P23 | DEX (탈중앙화 거래소 트레이딩 봇) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/DEX/` | 1 |
+| P24 | Dstream (SKT 데이터쉐어링 우회 시스템) | `~/Dstream/` | 2 |
+| P25 | TEREV (기술혁명 연대기 — 콘텐츠 기획) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/TEREV/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)

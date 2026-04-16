@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-16T19:54:56",
+  "last_updated": "2026-04-17T03:03:23",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -183,6 +183,12 @@
       "status": "active",
       "docs": [
         {
+          "ts": "2026-04-17 03:03",
+          "title": "20260417 012751 CineLink 발전방향",
+          "file": "P16_CineLink/20260417_012751_CineLink_발전방향.md",
+          "tags": []
+        },
+        {
           "ts": "2026-04-15 10:04",
           "title": "20260408 183400 CineLink 브랜드 가이드",
           "file": "P16_CineLink/20260408_183400_CineLink_브랜드_가이드.md",
@@ -224,6 +230,12 @@
       "desc": "고속도로 AI 관제 시스템",
       "status": "active",
       "docs": [
+        {
+          "ts": "2026-04-17 03:03",
+          "title": "20260416 195740 HighLink MVP 테스트결과보고서",
+          "file": "P18_HighLink/20260416_195740_HighLink_MVP_테스트결과보고서.md",
+          "tags": []
+        },
         {
           "ts": "2026-04-16 19:54",
           "title": "20260416 190744 HighLink 로컬MVP 계획서",
@@ -324,6 +336,12 @@
       "status": "active",
       "docs": [
         {
+          "ts": "2026-04-17 03:03",
+          "title": "20260416 202727 EP01 v3 품질개선 계획",
+          "file": "P21_FEP/20260416_202727_EP01_v3_품질개선_계획.md",
+          "tags": []
+        },
+        {
           "ts": "2026-04-16 19:54",
           "title": "20260415 094841 P22 Flash MOE 의견서 v2",
           "file": "P21_FEP/20260415_094841_P22_Flash_MOE_의견서_v2.md",
@@ -336,7 +354,7 @@
           "tags": []
         },
         {
-          "ts": "2026-04-16 19:54",
+          "ts": "2026-04-17 03:03",
           "title": "20260415 092337 FEP 영상제작 TRAP 관리시스템",
           "file": "P21_FEP/20260415_092337_FEP_영상제작_TRAP_관리시스템.md",
           "tags": []
@@ -469,11 +487,19 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-04-16 19:54",
+        "ts": "2026-04-17 03:03",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
           "전역지침"
+        ]
+      },
+      {
+        "ts": "2026-04-17 03:03",
+        "title": "ai_limits_and_measurement",
+        "file": "_global/instructions/ai_limits_and_measurement.md",
+        "tags": [
+          "지침모듈"
         ]
       },
       {
@@ -629,7 +655,7 @@
             ]
           },
           {
-            "ts": "2026-04-16 19:54",
+            "ts": "2026-04-17 03:03",
             "title": "P21 FEP 프로젝트지침 (CLAUDE.md)",
             "file": "_sessions/P21_FEP/CLAUDE.md",
             "tags": [
@@ -651,7 +677,7 @@
             ]
           },
           {
-            "ts": "2026-04-16 19:54",
+            "ts": "2026-04-17 03:03",
             "title": "P18.7.2.0",
             "file": "_sessions/P18_HighLink/P18.7.2.0.md",
             "tags": [
