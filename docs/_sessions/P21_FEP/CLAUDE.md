@@ -268,7 +268,7 @@ EP01_forced_compliment/
 - ✅ 캐릭터 D 이름: 지우 (지호에서 변경, 중성적 외형 + 바지 착용)
 - ✅ ComfyUI 실행: `cd ~/developer/ComfyUI && python main.py --listen 0.0.0.0 --port 8188`
 - ✅ GGUF 모델: flux1-kontext-dev-Q8_0.gguf (UnetLoaderGGUF 노드 사용)
-- ✅ HuggingFace 계정: Jinyjyc (토큰: [REDACTED])
+- ✅ HuggingFace 계정: Jinyjyc (토큰: [HF_TOKEN_REDACTED])
 - ✅ find_scene_image: `_alt` 파일 제외 필수 (macOS APFS glob 순서 비결정적)
 - ✅ 수빈+아기 씬(scene_05): 마주보는 구도 → 쇼츠는 center 크롭 (split 불가)
 - ❌ `--overlay` 빌드는 output/ 파일을 덮어씀 — 오버레이 영상은 반드시 별도 파일명으로 저장 (예: `_ko` 접미사)
@@ -291,14 +291,82 @@ EP01_forced_compliment/
 - ✅ Style A 알파 추출: Flood Fill 방식 사용 (가장자리 연결 흰색만 제거) — 글로벌 threshold는 흰 옷을 투명하게 만드는 문제 있음
 - ✅ 크로마키 알파 추출 시 green spill 보정 필수 — 머리카락 갈라진 부분에 초록끼 잔류 → `despill_green()` 함수로 주변색 블렌딩 (기존 생성분은 수정 불필요, 향후 새 추출 시 자동 적용)
 
+## 🔍 품질관리 체크리스트 (FEP 특화)
+
+> **전역 QA 지침**: `~/.claude/instructions/quality_assurance.md` 선행 참조 (6계층, P0~P3, 회귀 보고 형식)
+> **FEP 적용 원칙**: 검수 요청 전 아래 Layer 1-5 자체 검사 + 회귀 비교 보고서 작성 필수
+
+### 사용자 검수 전 필수 실행 체크리스트
+
+#### Layer 1: 기술 스펙 (자동화 가능)
+- [ ] 해상도 1920×1080 (`ffprobe -v error -select_streams v:0 -show_entries stream=width,height`)
+- [ ] 프레임레이트 일관성 30fps (`ffprobe ... -show_entries stream=r_frame_rate,avg_frame_rate`)
+- [ ] 오디오 코덱 AAC, 샘플레이트 24000/48000Hz 일관성
+- [ ] 스트림 오류 0건 (`ffmpeg -v error -i {file} -f null - 2>&1`)
+- [ ] 라우드니스 측정 (목표 YouTube -14 LUFS ±1): `ffmpeg -i {file} -af loudnorm=print_format=json -f null -`
+- [ ] 파일 크기 합리성 (10분 1080p 기준 25~40MB)
+
+#### Layer 2: 무결성
+- [ ] 16개 메인 클립 + 16개 비트 클립 전수 존재 (clips_v3/)
+- [ ] 각 클립 duration 리스트 == 각본 예상 길이 (±0.5초)
+- [ ] 롱폼 총 길이 == 클립 합산 (±0.1초)
+- [ ] `⚠️ 알파 없음` 경고 0건 (빌드 로그 grep)
+- [ ] 타임스탬프 파일명 규칙 준수 (YYYYMMDD_HHMMSS_*)
+- [ ] concat 경계 프레임 깨짐 없음 (씬 전환점 프레임 샘플링)
+
+#### Layer 3: 지각 품질 (FEP 특화)
+- [ ] **LP 크로마키 스필**: 초록끼 잔류 여부 — 머리카락 엣지 샘플 프레임 시각 검수 (TRAP-009/020)
+- [ ] **말풍선 가독성**: 폰트 ≥44px, 최소 380×250px, 대비 4.5:1 이상 (TRAP-025/026)
+- [ ] **말풍선 꼬리 방향**: 화자 x_ratio 기반 자동, 캐릭터 머리 지시 (TRAP-025)
+- [ ] **말풍선 위치**: 캐릭터 머리 위, 화면 가장자리 아님
+- [ ] **포트레이트 구도**: 캐릭터 중복 없음 (BG는 캐릭터 없는 버전, TRAP-028)
+- [ ] **Style A/B 일관성**: 같은 씬 내 스타일 혼용 없음
+- [ ] **LP 싱크**: 말하는 캐릭터의 LP 모션 == 오디오 화자 (TRAP-011)
+- [ ] **A/V 싱크**: ±40ms 내 (립싱크 스팟체크 3곳)
+- [ ] **씬 색감 통일**: 동일 장소 씬 간 색온도 차이 검수
+- [ ] **텍스트 오버레이 D/E 타입**: 킬링 라인/구조 라벨 전수 렌더링 (TRAP-030)
+
+#### Layer 4: 서사/의미
+- [ ] 각본 26씬 × v3 16클립 매핑표 + 누락 씬 없음
+- [ ] 감정 곡선 ①균열→②자각→③폭풍→④항복→⑤거울 단계별 배치 확인
+- [ ] 킬링 라인 전수 전달 ("나 예쁘지?", "아닙니다", "대답해주기 싫다" 등)
+- [ ] 프롤로그 훅 5~15초 몰입 유도 (S-00/S-01)
+- [ ] 에필로그 bookend 프롤로그 주제 연결 (S-23/S-24)
+
+#### Layer 5: 회귀 비교 (v2 → v3)
+비교 대상: `EP01_forced_compliment/output/20260414_231926_EP01_v2_preview.mp4` (v2 최종) vs `output/20260415_104206_EP01_v3_lp_bubble.mp4` (v3 최신)
+
+**회귀 보고 필수 항목**:
+- 개선점 (정량/정성): 클립 수, 씬 커버리지, LP 적용 씬 목록
+- 유지점: 변경 없는 영역 + 품질 유지 확인
+- 퇴보점: 새로 발견된 이슈 (P0~P3 분류 + 원인/대응)
+- 트레이드오프 분석
+
+### 자동화 검사 스크립트 (향후 작성)
+- `EP01_forced_compliment/qa_layer1_technical.sh` — ffprobe 기반 스펙 덤프
+- `EP01_forced_compliment/qa_layer2_integrity.py` — 클립 duration 합계 검증
+- `EP01_forced_compliment/qa_layer3_frames.py` — 씬별 대표 프레임 추출
+- `EP01_forced_compliment/qa_layer5_regression.py` — v2/v3 자동 비교 표
+
+### 검수 요청 트리거 조건 (엄격)
+사용자에게 검수 요청하기 전 **반드시** 아래를 제출:
+1. Layer 1-5 체크리스트 결과 (✅/🟡/❌)
+2. 발견 이슈 P0~P3 분류 + 수정 내역
+3. 회귀 비교 보고서 (개선/유지/퇴보/트레이드오프)
+4. Known Issues 목록 (검수 범위 외)
+5. 집중 검수 요청 포인트 3~5개
+
+**위반 사례**: P21.9wc에서 TRAP-031 수정 후 자체 QA 없이 사용자 검수 요청 → 사용자 시간 낭비.
+**재발 방지**: 빌드 완료 직후 Layer 1-2 자동 검사 → 통과 후에만 "빌드 완성" 보고.
+
 ## ⚠️ TRAP 함정 관리 시스템 (필수 참조)
 
 > **⚠️ 매 세션 시작 시 + 새 Phase 진입 시 반드시 아래 문서의 TRAP 인덱스를 먼저 읽을 것.**
 > `FEP/docs/20260415_092337_FEP_영상제작_TRAP_관리시스템.md`
 > (구 파일명: `docs/production_lessons.md` — 2026-04-16 리네임)
-> — **TRAP-001~030**: 일러스트, 알파 추출, FFmpeg, LP, 말풍선, 대사 타이밍, 메모리 관련 시행착오 30건 + 절차 체크리스트
+> — **TRAP-001~033**: 일러스트, 알파 추출, FFmpeg, LP, 말풍선, 대사 타이밍, 메모리, 빌드 관련 시행착오 33건 + 절차 체크리스트
 > — 각 TRAP에 **원인 파일/수정 파일/예방책** 기록 → 같은 함정 재진입 방지
-> — 신규 시행착오 발견 시 즉시 다음 TRAP 번호 부여하여 등록 (TRAP-031~)
+> — 신규 시행착오 발견 시 즉시 다음 TRAP 번호 부여하여 등록 (TRAP-034~)
 
 ## 재사용 시스템 (에피소드 공용)
 

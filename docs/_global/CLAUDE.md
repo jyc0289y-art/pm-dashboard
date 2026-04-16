@@ -1,6 +1,7 @@
 # Claude 글로벌 지침
 
-**필수: 새 세션 시작 시 `memory/sessions/registry.md`를 읽고 P번호를 부여하여 첫 응답에서 안내하라. 상세 → "세션 컨텍스트 포크 시스템" 섹션 참조.**
+**필수: 새 세션 시작 시 `~/.claude/registries/{P번호}.md`를 읽고 P번호를 부여하여 첫 응답에서 안내하라. 상세 → "세션 컨텍스트 포크 시스템" 섹션 참조.**
+**⚠️ 레지스트리 SSOT (2026-04-16 이관)**: iCloud 내 `{프로젝트}/memory/sessions/registry.md`는 더 이상 SSOT가 아니며 MOVED stub만 남아 있다. 실제 SSOT는 `~/.claude/registries/{P번호}.md` (iCloud 외부, 동기화 지연 없음). 새 세션 등록/조회는 반드시 이 경로를 사용하라.
 
 ## Worker(부하 LLM) 활용 규칙
 
@@ -84,12 +85,15 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | `brand_info.md` | SL Corporation 브랜드 컨셉, 프로젝트 목록 | 브랜딩/기획 작업 시 |
 | `tool_optimization.md` | 도구별 토큰 소비 표, 파일 읽기 최적화 | 도구 사용 패턴 확인 시 |
 | `session_fork.md` | P번호 체계, 포크 프로토콜, REQ/ISS 추적, 세션 마무리 | 세션 포크/마무리/REQ/ISS 작업 시 |
+| `fork_cleanup_guide.md` | 포크 미준비 기존 세션 정리 절차 | "기존 세션 정리해줘" 지시 시 |
 
 **재사용 모듈** (`~/.claude/modules/`):
 | 파일 | 내용 | 로드 조건 |
 |------|------|----------|
 | `_index.md` | MOD 전역 레지스트리 | "MOD-xxx 포크해줘" 요청 시 |
 | `MOD-001_goodnotes.md` | GoodNotes 필기 오버레이 (v1.1.0) | MOD-001 참조 시 |
+| `MOD-002_stroke_recognizer.md` | StrokeRecognizer 펜→도형 인식 (v1.0.0) | MOD-002 참조 시 |
+| `MOD-003_markdown_renderer.md` | Markdown→HTML 렌더러 (v1.0.0) | MOD-003 참조 시 |
 
 **운영 원칙:**
 1. 전역지침 본문에는 핵심 원칙 1~2줄 + `→ 상세: 파일경로` 참조만 기재
@@ -122,10 +126,49 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 ## 세션 컨텍스트 포크 시스템
 
 장시간 세션의 토큰 과소비를 방지하고, 새 세션에서 이전 작업의 핵심 맥락을 정확히 이어받기 위한 시스템.
-핵심: P번호 체계로 세션을 식별하고, 세션지침 파일로 컨텍스트를 포크한다.
-→ **상세 (P번호 체계, 포크 프로토콜, REQ/ISS 추적, 세션 마무리)**: `~/.claude/instructions/session_fork.md` 참조
+핵심: **4계층 세션번호**로 충돌 없이 식별, 세션지침 파일로 컨텍스트 포크.
+→ **상세 (프로토콜, REQ/ISS 추적, 세션 마무리)**: `~/.claude/instructions/session_fork.md` 참조
 
-**⚠️ 필수: 새 세션 시작 시 `memory/sessions/registry.md`를 읽고 P번호를 부여하여 첫 응답에서 안내하라.**
+**⚠️ 필수: 새 세션 시작 시 `~/.claude/registries/{P번호}.md`를 읽고 세션번호를 부여하여 첫 응답에서 안내하라.**
+
+**채팅번호 할당 안전망 (타임스탬프 재확인)**: 새 채팅 개시 시 registry를 한 번 더 재read하여 max가 변했는지 확인. 변했으면 더 큰 값 사용. 동시 개시 채팅 간 경쟁 조건 최소화.
+
+### 세션 번호 체계 (4계층, 2026-04-15 시행)
+
+**형식**: `P{프로젝트}.{채팅}.{포크}.{Agent}` — `wc` 등 정책 태그는 폐지
+
+| 계층 | 의미 | 증가 시점 |
+|------|------|-----------|
+| 프로젝트 N | 프로젝트 번호 | 신규 프로젝트 생성 (전역) |
+| 채팅 C | 채팅창 식별 | 새 채팅창 개시 (registry SSOT) |
+| 포크 F | 자동포크 식별 | 같은 채팅 내 압축·자동포크 (채팅 내) |
+| Agent A | Agent 파견 식별 | `.0`=원본 스레드, `.1+`=Agent (포크 내) |
+
+**증가 규칙**:
+- **새 채팅 개시**: `registry.md` max 채팅번호 +1 → `P{N}.{max+1}.1.0`
+- **같은 채팅 내 자동포크**(압축 등): 채팅 고정, 포크 +1, Agent=0 리셋
+  - 예: `P3.28.1.0` → 압축 → `P3.28.2.0`
+- **Agent 파견**: 채팅·포크 고정, Agent +1
+  - 예: `P3.28.1.0` → 파견 → `P3.28.1.1`, 또 파견 → `P3.28.1.2`
+- **Agent 내부에서 또 Agent 파견**: 계층 증가 금지, Agent번호만 +1 (`.1.1.1.1` 꼬리 방지)
+- **타 프로젝트 Agent 파견**: 대상 프로젝트 registry에서 새 채팅번호 할당
+  - 예: `PM.17.1.0`이 P3에 파견 → P3 registry max=28 → `P3.29.1.0` 생성
+- **교차채팅 포크**(채팅 오류로 재개설): 새 채팅번호 할당, 족보는 **`포크원` 필드로만 추적**
+  - 예: `P1.3.5.0` 오류 → 새 채팅 `P1.4.1.0` (포크원: `P1.3.5.0`)
+  - **계층을 끌어올리지 않는다** (루트번호만으로 포크체인을 추적하지 않음)
+
+**유산 세션 호환**: 2026-04-14 이전 평면 번호(`P3.28wc` 등)는 그대로 보존. 해당 세션에서 신규 포크 발생 시부터 4계층 적용 (유산 번호는 묵시적 `.1.0`으로 간주: `P3.28wc` → 압축 → `P3.28.2.0`).
+
+#### 레지스트리 스키마 (2026-04-16 이관 후)
+
+**위치**: `~/.claude/registries/{P번호}.md` (프로젝트별 1파일, iCloud 외부)
+
+**표준 컬럼**: `| 세션번호 | 제목 | 생성일 | 포크원 | UUID | 상태 |`
+- **UUID**: Claude Code JSONL 세션 UUID (`~/.claude/projects/*/{UUID}.jsonl`). 과거 항목은 `-`. 신규 세션은 반드시 채워 넣는다 (JSONL 파일명 = UUID).
+- **포크원**: 직전 세션 ID. 루트는 `없음 (루트)`.
+- **상태**: `진행중` / `종료`.
+
+**iCloud stub**: `{프로젝트}/memory/sessions/registry.md`는 MOVED 안내만 포함. 절대 이 stub에 신규 행을 추가하지 말 것.
 
 #### 프로젝트 코드 레지스트리
 
@@ -144,7 +187,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P8 | Claude Remote (텔레그램 봇) | `~/developer/Claude_remote/` | 1 |
 | P9 | MarkLink SL | `~/developer/document/` | 1 |
 | P10 | Hodlum (Ludlum 3030-2 커스텀 로깅 S/W) | `~/developer/Hodlum/` | — |
-| P11 | MVP 후보 추출 | `~/developer/mvp/` | 1 |
+| P11 | MarkLink SL (OfficeLink SL Suite) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/marklink-sl/` | 1 |
 | P12 | HOBIS Cf-252 (선량평가 계산기) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/hobis_cf252/` | 2 |
 | P13 | PhotoLink (웹 사진 편집기) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/PhotoLink/` | 1 |
 | P14 | 3DLink (iPad 3D CAD 모델링) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/3DLink/` | 1 |
@@ -155,16 +198,15 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P19 | DailyBriefing (일일 브리핑) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/DailyBriefing/` | 1 |
 | P20 | PMLink (모바일 PM 클라이언트) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/PMLink/` | 1 |
 | P21 | FEP (익숙한 경험의 심리학) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/FEP/` | 1 |
+| P22 | FlashMOE (회사의 3원소 — 1인 MOE 스택) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/FlashMOE/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
-#### 정책 태그 레지스트리
+#### 정책 태그 (폐지, 2026-04-15)
 
-| 태그 | 정책 | 도입 세션 |
-|------|------|-----------|
-| `w` | Worker LLM 위임 (Ollama/Gemini) | P3.2 |
-| `c` | 컨텍스트 포크 시스템 | P3.3wc |
-
-새 정책 도입 시 소문자 1자 태그 추가. 해당 정책 도입 이후 생성된 세션에 부여.
+`w`(Worker), `c`(Context fork) 등 정책 태그는 모두 기본값이 되어 폐지.
+- **유산 세션**의 `wc` 등 접미는 그대로 보존 (소급 제거 금지)
+- **신규 세션**은 4계층 번호만 사용 (접미 없음)
+- 향후 새 정책 도입 시에도 태그 대신 세션지침 본문에 기록
 
 ## 복잡한 기획·편집 판단 시 opusplan 안내
 
@@ -185,6 +227,6 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 
 자동 컨텍스트 압축이 발생하면:
 1. 사용자에게 "⚠️ 압축 발생" 알림
-2. 세션지침 즉시 갱신 + 같은 채팅 내에서 자동 포크 (새 세션 번호 부여)
-3. **`## 금지/확정 사항` 섹션을 가장 먼저 확인** — 이전 세션에서 확인된 금지/불가 사항을 새 세션에 반드시 전달. 작업 재개 전 금지 사항 체크 필수
-4. **사용자에게 새 채팅을 열라고 안내하지 않는다** — 압축은 자동 처리되며 사용자는 같은 채팅에서 계속 작업
+2. 세션지침 즉시 갱신 + **포크번호 +1 자동 부여** (`P{N}.{C}.{F+1}.0`) — ⚠️ **채팅번호 건드리지 말 것** (타 채팅 충돌 방지 핵심)
+3. **`## 금지/확정 사항` 섹션을 가장 먼저 확인** — 이전 세션 금지/불가 사항 필수 전달
+4. **사용자에게 새 채팅을 열라고 안내하지 않는다** — 사용자는 같은 채팅에서 계속 작업
