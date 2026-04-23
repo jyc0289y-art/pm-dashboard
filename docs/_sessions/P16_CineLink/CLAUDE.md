@@ -8,8 +8,18 @@
 - **선행연구**: GO 판정 (에이전시 모델, CAGR 42%, PM.4wc)
 
 ## 발전방향 정본
-⭐ **정본 문서**: `20260417_012751_CineLink_발전방향.md` (프로젝트 루트)
+⭐ **정본 문서**: `20260417_012751_CineLink_발전방향.md` (Phase A 완료, 진화 로드맵)
+⭐ **통합 기획안**: `20260423_172112_영상편집자동화_통합기획안.md` (3대 편집 장애 해결, 회사↔맥북 컨텍스트 브리지)
 → **옵션 1 → 옵션 2 → 옵션 3 진화 로드맵**: CapCut 전담(현재) → 이원 병행 → CineLink 전담
+
+## 3대 편집 기능 (2026-04-23 확장)
+- **VideoIndex**: 영상 → 읽을 수 있는 텍스트 (Whisper + YOLO + Places365)
+- **SoloMode**: 편집 기술 없어도 Claude 명령으로 편집 (cut-assembler, color_lib, find-audio)
+- **ConceptForge**: 주제 한 줄 → 촬영 기획 → EditPlan → 자동 편집
+
+## 외부 연계
+- **HighLink (P18)**: YOLO11L 심링크, vision_lib 포팅 (`cinelink/docs/asset_inventory.md` 진척 추적)
+- **FlashMOE (P22)**: 로컬 LLM 라우팅 (Phase 1+ 이후 MCP 통합)
 
 ## 3층 아키텍처
 ```
