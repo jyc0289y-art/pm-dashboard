@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-24T03:02:38",
+  "last_updated": "2026-04-25T03:03:02",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1293,6 +1293,12 @@
       "status": "active",
       "docs": [
         {
+          "ts": "2026-04-25 03:03",
+          "title": "20260424 132336 HighLink P18.8.1.0 재개추진계획 DataFusion 실CCTV연결 로컬전용",
+          "file": "P18_HighLink/20260424_132336_HighLink_P18.8.1.0_재개추진계획_DataFusion_실CCTV연결_로컬전용.md",
+          "tags": []
+        },
+        {
           "ts": "2026-04-17 03:03",
           "title": "20260416 195740 HighLink MVP 테스트결과보고서",
           "file": "P18_HighLink/20260416_195740_HighLink_MVP_테스트결과보고서.md",
@@ -1549,7 +1555,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-04-24 03:02",
+        "ts": "2026-04-25 03:03",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
@@ -1736,6 +1742,14 @@
             "file": "_sessions/P18_HighLink/registry.md",
             "tags": [
               "레지스트리"
+            ]
+          },
+          {
+            "ts": "2026-04-25 03:03",
+            "title": "P18.8.1.0",
+            "file": "_sessions/P18_HighLink/P18.8.1.0.md",
+            "tags": [
+              "세션지침"
             ]
           },
           {

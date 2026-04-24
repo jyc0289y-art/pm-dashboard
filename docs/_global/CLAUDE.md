@@ -214,6 +214,8 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P24 | Dstream (SKT 데이터쉐어링 우회 시스템) | `~/Dstream/` | 2 |
 | P25 | TEREV (기술혁명 연대기 — 콘텐츠 기획) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/TEREV/` | 1 |
 | P26 | MOAT / 大思惟齋 (장기 사유·학습·연구 대화 아카이브) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/MOAT/` | 1 |
+| P27 | CardioLink (심혈관 모니터링 — 지속 ECG + 1인가구 안전망) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/CardioLink/` | 1 |
+| P28 | HornetLink (장기체공 Tailsitter 드론 — 군·관급 기술의 민간 민주화) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HornetLink/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
