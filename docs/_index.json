@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-04-27T03:03:02",
+  "last_updated": "2026-04-28T03:02:45",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1347,9 +1347,21 @@
           "tags": []
         },
         {
+          "ts": "2026-04-28 03:02",
+          "title": "20260410 185752 데모영상 재생성의뢰서(1)",
+          "file": "P18_HighLink/20260410_185752_데모영상_재생성의뢰서(1).md",
+          "tags": []
+        },
+        {
           "ts": "2026-04-16 19:54",
           "title": "20260410 185752 Streamlit 서버 재시작 지시서",
           "file": "P18_HighLink/20260410_185752_Streamlit_서버_재시작_지시서.md",
+          "tags": []
+        },
+        {
+          "ts": "2026-04-28 03:02",
+          "title": "20260410 185752 Streamlit 서버 재시작 지시서(1)",
+          "file": "P18_HighLink/20260410_185752_Streamlit_서버_재시작_지시서(1).md",
           "tags": []
         },
         {
@@ -1745,6 +1757,22 @@
             ]
           },
           {
+            "ts": "2026-04-28 03:02",
+            "title": "P18.8.3.0",
+            "file": "_sessions/P18_HighLink/P18.8.3.0.md",
+            "tags": [
+              "세션지침"
+            ]
+          },
+          {
+            "ts": "2026-04-28 03:02",
+            "title": "P18.8.2.0",
+            "file": "_sessions/P18_HighLink/P18.8.2.0.md",
+            "tags": [
+              "세션지침"
+            ]
+          },
+          {
             "ts": "2026-04-25 03:03",
             "title": "P18.8.1.0",
             "file": "_sessions/P18_HighLink/P18.8.1.0.md",
@@ -1949,9 +1977,25 @@
         "name": "Hodlum",
         "docs": [
           {
+            "ts": "2026-04-28 03:02",
+            "title": "registry_PCbackup_20260427",
+            "file": "_sessions/P10_Hodlum/registry_PCbackup_20260427.md",
+            "tags": [
+              "레지스트리"
+            ]
+          },
+          {
             "ts": "2026-04-16 19:54",
             "title": "registry",
             "file": "_sessions/P10_Hodlum/registry.md",
+            "tags": [
+              "레지스트리"
+            ]
+          },
+          {
+            "ts": "2026-04-28 03:02",
+            "title": "registry(1)",
+            "file": "_sessions/P10_Hodlum/registry(1).md",
             "tags": [
               "레지스트리"
             ]
