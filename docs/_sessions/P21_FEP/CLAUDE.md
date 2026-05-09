@@ -243,7 +243,7 @@ EP01_forced_compliment/
   - LP 영상: 그린스크린(#00FF00) → FFmpeg chromakey로 실시간 합성
   - 출력: `v3_layers/lp/{timestamp}_alpha_B_{char}--{motion}.mp4`
 - ⬚ Phase 8e: Typecast TTS 녹음 (감정별 분할 클립 + 후처리 타이밍)
-  - 보이스 확정: 내레이터=대길, 수빈=지안, 민준=한준, 지우=진서
+  - 보이스 확정: 내레이터=대길, 수빈=지안, 민준=한준, **지우=건우** (2026-05-06 재캐스팅: 진서→건우, 변성기 전 소년 + 교육/강의 진중 톤)
 - 🟡 Phase 8e-2: 텍스트 오버레이 + 말풍선 합성 시스템
   - ComfyUI FLUX로 말풍선 5종(speech L/R/C + thought L/R) + 알파 생성 완료
   - ComfyUI FLUX로 천사 2종 + 악마 2종 캐릭터 + 알파 생성 완료
@@ -299,7 +299,10 @@ EP01_forced_compliment/
 - ❌ build_longform의 glob에 `_seg/_cut/_bcut` 임시 파일 포함 금지 — B컷 세그먼트 이중 concat으로 133초 부풀림 사고 발생
 - ✅ **모든 출력물 파일명에 타임스탬프 필수**: `YYYYMMDD_HHMMSS_설명.확장자` (빌드 영상, 프리뷰, 클립, 롱폼 모두 적용 — 전후 관계 파악 + 덮어쓰기 방지)
 - ✅ 다국어 전략: 단일 채널 + 멀티 오디오 + 번역 메타데이터 (채널 분리 X)
-- ✅ 텍스트 오버레이는 manifest.json + Pillow 기반 후처리 (A=말풍선, B=생각풍선, C=심리학용어, D=킬링라인, E=구조라벨 — 5가지 타입 전체 구현)
+- ✅ 텍스트 오버레이는 manifest.json + Pillow 기반 후처리 (A=말풍선, B=생각풍선, C=심리학용어, D=킬링라인, E=구조라벨, F=나레이션 하단자막 — **6가지 타입**)
+- ✅ **Type F 필수 (TRAP-044 대응)** — 모든 나레이션 발화는 하단 자막으로 노출. 두 성공 채널(지구박물관·심리학탐정) 분당 770~822자 vs FEP 20자 격차 해소. EP.02부터는 각본 단계에서 사전 작성 필수
+- ✅ Type F 자막 표준: 한 줄 ≤32자, segment ≤3초, 중간값 2.0~2.3초 (롱폼 다큐 업계 표준)
+- ❌ 자막 글자수를 11자 이하로 단축 금지 (TRAP-043) — 짤툰 11자는 쇼츠 기준이며 롱폼은 29~30자가 표준
 - ✅ Type B(생각풍선/내면독백) 텍스트 색상: 연한 블루 #B0D4F1 (외부 대사와 시각 구분 — 채널 벤치마킹)
 - ✅ Type C(심리학 용어): 노란 밑줄 강조 + 한국어/영어 2줄 표시 + 하단 반투명 바 (Psych2Go/Kurzgesagt 벤치마킹)
 - ✅ Type D(킬링라인): 전체화면 디밍(40% 어둡게) + 큰 폰트(56~72px) + 따옴표 + 화자명 표시 (영상툰 벤치마킹)
@@ -322,7 +325,7 @@ EP01_forced_compliment/
 - ✅ 천사/악마 에셋: `assets/{angel,devil}/{angel,devil}_character{,_left,_right}_alpha.png`
 - ✅ 콩이 포즈 라이브러리: 8종 (`sitting_front/happy, crawling, reaching, sleeping, clapping, crying, looking_up`)
 - ❌ Pillow 말풍선 생성은 품질 부적합 — ComfyUI 에셋만 사용
-- ✅ 지우 보이스 리캐스팅 예정: 여성 → 변성기 전 소년 (성숙한 말투)
+- ✅ 지우 보이스 재캐스팅 완료 (2026-05-06): 진서(여성) → **건우** (변성기 전 소년, 교육/강의 톤). 후보 5명(하준/건우/아봉/팡팡/머루) Typecast 즐겨찾기 메모 보존
 - ✅ 캐릭터 D 이름: 지우 (지호에서 변경, 중성적 외형 + 바지 착용)
 - ✅ ComfyUI 실행: `cd ~/developer/ComfyUI && python main.py --listen 0.0.0.0 --port 8188`
 - ✅ GGUF 모델: flux1-kontext-dev-Q8_0.gguf (UnetLoaderGGUF 노드 사용)
@@ -405,6 +408,31 @@ EP01_forced_compliment/
 - `EP01_forced_compliment/qa_layer2_integrity.py` — 클립 duration 합계 검증
 - `EP01_forced_compliment/qa_layer3_frames.py` — 씬별 대표 프레임 추출
 - `EP01_forced_compliment/qa_layer5_regression.py` — v2/v3 자동 비교 표
+
+### 빌드 후 자동 비교 평가 의무 (TRAP-046)
+
+> **전역지침 동기화**: `~/.claude/CLAUDE.md` "산출물 보존 + 개선 평가 의무" 섹션 준수
+
+**모든 새 빌드 직후 다음을 실행:**
+
+```bash
+cd EP01_forced_compliment
+python qa_build_compare.py   # 최신 2개 자동 비교
+```
+
+산출물: `docs/build_comparisons/build_compare_{ts}.md` + JSON
+
+자동 측정 항목:
+- 영상 길이·크기·비트레이트 변화
+- 씬 컷 수 + 평균/중간값/min/max duration
+- 분당 컷 빈도
+- manifest 타입별 항목 수 (A~F)
+- 같은 시점 프레임 추출 가이드
+
+**규칙**:
+- "개선됨" 보고 전 반드시 비교 보고서 첨부
+- 정량 지표만으로 단정 금지 → 사용자 시각/청각 검증 트리거 명시
+- 회귀 항목(이전 대비 퇴보)도 빠짐없이 보고
 
 ### 검수 요청 트리거 조건 (엄격)
 사용자에게 검수 요청하기 전 **반드시** 아래를 제출:
@@ -744,7 +772,7 @@ txt2img은 매번 다른 결과 → 일관성 유지 어려움. **마스터 에�
 | 내레이터 | **대길** (#다큐/리뷰) | 차분 | 1.0x | 시리즈 고정 |
 | 수빈 | **지안** (#라디오/팟캐스트) | 기쁨 | 1.1x | 밝고 자신만만 |
 | 민준 | **한준** (#라디오/팟캐스트) | 차분/낮음 | 0.8~0.9x | 건조하고 에너지 절약 |
-| 지우 | **진서** (#다큐/리뷰) | 차분 | 0.9x | 밝으려고 노력하지만 지쳐있는 |
+| 지우 | **건우** (#교육/강의) | 차분 | 0.95x | 변성기 전 소년 + 진중한 톤 (2026-05-06 재캐스팅 확정) |
 
 - EP.01에서 보이스 확정 시 이 테이블에 Typecast 보이스명/ID 기입
 - 신규 에피소드의 신규 캐릭터도 같은 패턴으로 등록

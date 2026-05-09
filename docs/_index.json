@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-02T03:03:23",
+  "last_updated": "2026-05-09T16:45:25",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1434,7 +1434,7 @@
           "tags": []
         },
         {
-          "ts": "2026-04-17 03:03",
+          "ts": "2026-05-09 16:45",
           "title": "20260415 092337 FEP 영상제작 TRAP 관리시스템",
           "file": "P21_FEP/20260415_092337_FEP_영상제작_TRAP_관리시스템.md",
           "tags": []
@@ -1567,7 +1567,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-04-30 03:03",
+        "ts": "2026-05-09 16:45",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
@@ -1594,6 +1594,14 @@
         "ts": "2026-04-15 10:28",
         "title": "SL 브랜드 정보",
         "file": "_global/instructions/brand_info.md",
+        "tags": [
+          "지침모듈"
+        ]
+      },
+      {
+        "ts": "2026-05-09 16:45",
+        "title": "disaster_recovery",
+        "file": "_global/instructions/disaster_recovery.md",
         "tags": [
           "지침모듈"
         ]
@@ -1634,6 +1642,14 @@
         "ts": "2026-04-15 10:28",
         "title": "도구 최적화",
         "file": "_global/instructions/tool_optimization.md",
+        "tags": [
+          "지침모듈"
+        ]
+      },
+      {
+        "ts": "2026-05-09 16:45",
+        "title": "trap_template",
+        "file": "_global/instructions/trap_template.md",
         "tags": [
           "지침모듈"
         ]
@@ -1735,7 +1751,7 @@
             ]
           },
           {
-            "ts": "2026-04-17 03:03",
+            "ts": "2026-05-09 16:45",
             "title": "P21 FEP 프로젝트지침 (CLAUDE.md)",
             "file": "_sessions/P21_FEP/CLAUDE.md",
             "tags": [
