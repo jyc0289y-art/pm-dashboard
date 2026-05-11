@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-11T03:03:12",
+  "last_updated": "2026-05-12T03:03:08",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1293,6 +1293,12 @@
       "status": "active",
       "docs": [
         {
+          "ts": "2026-05-12 03:03",
+          "title": "20260511 192252 멀티스크린컴퓨터 4사 비교조사 질문지 현섭",
+          "file": "P18_HighLink/20260511_192252_멀티스크린컴퓨터_4사_비교조사_질문지_현섭.md",
+          "tags": []
+        },
+        {
           "ts": "2026-04-25 03:03",
           "title": "20260424 132336 HighLink P18.8.1.0 재개추진계획 DataFusion 실CCTV연결 로컬전용",
           "file": "P18_HighLink/20260424_132336_HighLink_P18.8.1.0_재개추진계획_DataFusion_실CCTV연결_로컬전용.md",
@@ -1770,6 +1776,14 @@
             "file": "_sessions/P18_HighLink/registry.md",
             "tags": [
               "레지스트리"
+            ]
+          },
+          {
+            "ts": "2026-05-12 03:03",
+            "title": "P18.9.1.0",
+            "file": "_sessions/P18_HighLink/P18.9.1.0.md",
+            "tags": [
+              "세션지침"
             ]
           },
           {
