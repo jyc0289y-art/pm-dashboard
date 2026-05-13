@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-05-12T03:03:08",
+  "last_updated": "2026-05-14T03:03:15",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1573,7 +1573,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-05-09 16:45",
+        "ts": "2026-05-14 03:03",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
@@ -1600,6 +1600,14 @@
         "ts": "2026-04-15 10:28",
         "title": "SL 브랜드 정보",
         "file": "_global/instructions/brand_info.md",
+        "tags": [
+          "지침모듈"
+        ]
+      },
+      {
+        "ts": "2026-05-14 03:03",
+        "title": "clasp_workflow",
+        "file": "_global/instructions/clasp_workflow.md",
         "tags": [
           "지침모듈"
         ]

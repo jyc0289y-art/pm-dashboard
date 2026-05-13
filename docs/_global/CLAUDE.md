@@ -3,6 +3,16 @@
 **필수: 새 세션 시작 시 `~/.claude/registries/{P번호}.md`를 읽고 P번호를 부여하여 첫 응답에서 안내하라. 상세 → "세션 컨텍스트 포크 시스템" 섹션 참조.**
 **⚠️ 레지스트리 SSOT (2026-04-16 이관)**: iCloud 내 `{프로젝트}/memory/sessions/registry.md`는 더 이상 SSOT가 아니며 MOVED stub만 남아 있다. 실제 SSOT는 `~/.claude/registries/{P번호}.md` (iCloud 외부, 동기화 지연 없음). 새 세션 등록/조회는 반드시 이 경로를 사용하라.
 
+## ⚠️ Google Apps Script 작업 — clasp 필수 (P31에서 도출, 2026-05-13)
+
+Google Sheets / Docs / Forms / Slides의 **Apps Script 코드를 작성·수정·실행하는 작업이 발생하면 즉시 `~/.claude/instructions/clasp_workflow.md` 로드 후 그 워크플로를 따른다.**
+
+- ❌ 금지: Apps Script 편집기에 코드 복붙(Cmd+A→Cmd+V), Chrome MCP로 메뉴 자동 클릭, 사용자 클립보드·키보드 점유
+- ✅ 필수: `clasp push`로 디스크 ↔ Apps Script 자동 동기화. 함수 실행은 onOpen + PropertiesService 멱등 플래그 패턴
+- 적용 키워드 (자동 트리거): "Apps Script", "구글 시트 코드", "스프레드시트 자동화", "createMenu", "onOpen", "setFormula", ".gs 파일", "google.script.run"
+
+위반 시 P31에서 누적된 비효율(메뉴 클릭당 5~80초, 1500줄 복붙, 시스템 차단) 재발.
+
 ## Worker(부하 LLM) 활용 규칙
 
 Worker(Ollama/Gemini CLI)로 토큰 효율 향상 → 같은 요금제 내 처리량 극대화. 품질 훼손 금지.
@@ -270,6 +280,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | `fork_cleanup_guide.md` | 포크 미준비 기존 세션 정리 절차 | "기존 세션 정리해줘" 지시 시 |
 | **`ai_limits_and_measurement.md`** ⚠️ | **AI 구조적 한계 + 반복 실수 패턴 금지 + 측정 기반 개선 원칙** | **멀티미디어/영상/오디오/타이밍/시각 품질 작업 필수** |
 | **`disaster_recovery.md`** 🛡 | **재해 복구 표준 — 모든 P 프로젝트 공통 mirror·복원·worktree 패턴 (`~/.claude/` 자산은 iCloud·GitHub 자동 동기화 안 됨)** | **신규 P 프로젝트 시작 + 맥북 교체·복원 + worktree 운영 시 수동 로드** |
+| **`clasp_workflow.md`** 📜 | **Google Apps Script 작업 표준 — clasp 기반 (코드 푸시·실행·멱등 패턴). 메뉴 클릭·복붙 자동화 금지** | **Google Sheets/Docs/Forms/Slides에 Apps Script 작성·수정·배포 작업 시 필수 로드** |
 
 **재사용 모듈** (`~/.claude/modules/`):
 | 파일 | 내용 | 로드 조건 |
@@ -400,6 +411,8 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P27 | CardioLink (심혈관 모니터링 — 지속 ECG + 1인가구 안전망) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/CardioLink/` | 1 |
 | P28 | HornetLink (장기체공 Tailsitter 드론 — 군·관급 기술의 민간 민주화) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HornetLink/` | 1 |
 | P29 | AutoLink (업무 자동화 + 웹 대시보드 서비스) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/AutoLink/` | 1 |
+| P30 | SeouLink Game (한국어교실 비주얼노벨 게임화) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/SeouLink_Game/` | 1 |
+| P31 | HJ Safety Sheet 개선 (호진산업기연 안전관리현황통합파일 데이터 구조 혁신) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HJ/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
