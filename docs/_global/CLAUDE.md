@@ -415,6 +415,8 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P31 | HJ Safety Sheet 개선 (호진산업기연 안전관리현황통합파일 데이터 구조 혁신) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HJ/` | 1 |
 | P32 | StudioLink (전후면 융합 카메라 + 본격 NLE·RAW + P2P SNS 슈퍼앱) | `~/Library/Mobile Documents/com~apple~CloudDocs/StudioLink/` | 1 |
 | P33 | Artwork Automation (하드웨어 PCB 아트웍 자동화 — KiCad+SKiDL+FreeRouting PoC) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/Artwork/` | 1 |
+| P34 | ICRPlink (ICRP-107 핵종 붕괴 데이터 뷰어 — Mac/iOS/Android) | `~/Developer/ICRPlink/` | 1 |
+| P35 | OfficeLink (한컴 한글 macOS 대체제 — HWP/HWPX 편집, App Store 출시 목표) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/OfficeLink/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
