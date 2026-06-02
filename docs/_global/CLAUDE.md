@@ -418,6 +418,8 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P34 | ICRPlink (ICRP-107 핵종 붕괴 데이터 뷰어 — Mac/iOS/Android) | `~/Developer/ICRPlink/` | 1 |
 | P35 | OfficeLink (한컴 한글 macOS 대체제 — HWP/HWPX 편집, App Store 출시 목표) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/OfficeLink/` | 1 |
 | P36 | SOVEREIGN (군주: 성군의 길 — 통치사상 정전 기반 EdTech 게임) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/SOV/` | 1 |
+| P37 | 한국어학 학업 (외국어로서의 한국어교육 — 해커스원격평생교육원) | `~/Library/Mobile Documents/com~apple~CloudDocs/한국어학/` | 1 |
+| P38 | 링고링크 플랫폼 (와가마마링크·우리링크·링고링크 3축 — KR↔JP 어학원 SaaS + 언어교환 SNS) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/prj.WW/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
@@ -441,6 +443,28 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 
 스크린샷(~54K tok/건)은 최종 시각 확인에만 사용. 그 외는 텍스트 도구(`preview_snapshot`, `preview_inspect` 등) 우선.
 → **상세 규칙 (도구별 토큰/건 표, 파일 읽기 최적화)**: `~/.claude/instructions/tool_optimization.md` 참조
+
+### 압축 전 선제적 기록물 점검 (Pre-Compaction Record Checkpoint)
+
+> 사용자 지시(2026-06-02): "기록물은 압축 전에 항상 최신 상태로 유지·점검 완료되어야 한다. 압축을 기다리지 말 것."
+
+**압축의 사용자 신호**: 화면 우측 하단 진행 링이 **파랑→노랑**으로 바뀌고 차오르는 정도로 사용자가 압축 임박을 예측한다. 단, 어시스턴트는 이 UI 링을 직접 볼 수 없다 → **상시·선제적 최신화**로 대체하여, 사용자가 노랑 링을 보더라도 기록물이 이미 안전하도록 한다.
+
+규칙:
+1. **상시 최신화 (압축을 기다리지 않음)**: 의미 있는 작업 단위(기능 완성·디자인 패스·진단·결정·산출물)를 마칠 때마다 **즉시** 해당 기록물을 반영한다 — 세션지침 / 프로젝트 `.claude/CLAUDE.md` 역류 / TRAP(`docs/production_lessons.md`) / 메모리 / `~/.claude/registries/{P}.md`. 압축 시점까지 미루지 않는다.
+2. **턴 종료 전 점검 (체크포인트)**: 의미 있는 산출물을 만든 턴은 응답을 마치기 전에 "기록물 5종(세션·프로젝트 CLAUDE.md·TRAP·메모리·registry) 중 갱신 필요한 것"을 빠르게 자가 점검 → 누락 발견 시 그 턴 안에서 보강한다.
+3. **병렬 처리 (주 작업 중단 금지)**: 기록 점검·갱신은 주 작업을 멈추지 않고 병렬로 수행한다(사용자 피드백: 기록 위해 작업 흐름을 멈추지 말 것).
+4. **결과**: 압축이 언제 발생하든 직전 맥락이 파일에 보존되어 무손실 복원 가능.
+
+### 사용자 제공 자료 즉시 자원화 (User-Provided Asset Persistence)
+
+> 사용자 지시(2026-06-02): "중요한 자료는 대화 압축 시 소실되지 않게 바로바로 폴더 내 자원으로 저장." 계기: 사용자가 채팅으로 첨부한 와가마마 로고 원본이 압축 후 소실되어 픽셀 단위 비교가 불가했음.
+
+**사용자가 채팅으로 제공한 중요 입력 자료(이미지·로고·문서·참조 파일·샘플 데이터 등)는 받는 즉시 프로젝트 폴더에 파일로 저장한다.** 채팅 첨부물은 컨텍스트 압축 시 소실된다.
+- **대상**: 브랜드/로고 원본, 레퍼런스 이미지·디자인 시안, 사양서·스펙 캡처, 샘플 데이터 등 추후 비교·재사용할 모든 근거 자료.
+- **저장 위치**: 프로젝트 내 적절한 경로(`assets/`·`docs/`·`memory/` 또는 기능별 폴더). 파일명은 의미 있게(브랜드 원본 예: `assets/brand/{브랜드}_logo.{확장자}`).
+- **시점**: 받는 즉시(주 작업 시작 전). 저장 후 경로를 사용자에게 한 줄 안내.
+- **연계**: 저장 자원의 위치·용도는 reference 메모리 또는 프로젝트 `.claude/CLAUDE.md`에 기록(압축 후에도 위치 추적 가능). 위 "압축 전 선제적 기록물 점검"과 한 쌍.
 
 ### 압축 감지 시 대응
 
