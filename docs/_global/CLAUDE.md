@@ -72,6 +72,7 @@ P21 FEP 2026-05-06: 한글 깨진 일러스트 4개 재생성 후 빌드 안 한
 
 ### 규칙 1: 검수 페이지 자동 생성 의무
 검수 대상이 **영상·이미지·다층 시각물**인 경우, 다음을 포함한 단일 HTML 페이지를 생성한다:
+- **헤더에 `P{N} · {프로젝트명}` 식별 표기 필수**(2026-06-11 P38: 여러 프로젝트 동시 보고 시 구분 — 제목 또는 부제 맨 앞에)
 - 산출물 직접 재생/표시 (HTML5 video, img tag)
 - **같은 시점 / 같은 좌표 비교** (PREV vs NEW 그리드)
 - **시점별/항목별 체크리스트** (good/needs-fix/critical 라디오 + 자유 코멘트)
@@ -81,6 +82,7 @@ P21 FEP 2026-05-06: 한글 깨진 일러스트 4개 재생성 후 빌드 안 한
 - HTML 산출물: `{프로젝트}/docs/qa_review/qa_{YYYYMMDD_HHMMSS}_{설명}.html`
 - 의존 자산(프레임 이미지·복사 영상): 같은 디렉토리 또는 `{ts}_assets/` 하위
 - **단일 폴더로 자가완결** (브라우저로 열면 외부 의존 없이 동작)
+- **★프로젝트 식별 배지 필수 (2026-06-11, P40에서 격상)**: 모든 검수 페이지·HTML 보고서 머리에 **`P{N} · {프로젝트명}` 배지**를 눈에 띄게 표시 + `<title>`에 `[P{N}]` 접두. 여러 프로젝트가 동시에 보고하면 사용자가 구분 불가(P38·P40 혼동 사례).
 
 ### 규칙 3: 글로벌 스크립트
 - `~/.claude/scripts/generate_qa_page.py` 사용 (없으면 P21 FEP `EP01_forced_compliment/qa_review_page.py` 참조)
@@ -129,11 +131,16 @@ HTML 페이지의 "피드백 복사" 버튼은 다음 형식의 텍스트를 클
 - **첫 보고(앱/프로젝트 시작 단계)부터 빠짐없이** 기록. "최근 작업만" 보고 금지.
 - 기존 프로젝트에 보고서를 처음 만들 때: **git log + REQ/ISS 인덱스 + 세션지침으로 과거 보고를 소급 재구성**(실 타임스탬프는 git commit 시각 활용).
 
+### 프로젝트 식별 표기 (필수 — 2026-06-11 P38 추가)
+> 사용자: "html 보고서에 프로젝트명이랑 프로젝트 번호 달아. P38이랑 P40이 동시에 보고하면 구분이 안 돼."
+- **보고서 제목(meta title)·사이드바에 `P{N} · {프로젝트명}`을 반드시 포함**(예: "P38 · 와가마마링크 개발 보고서"). 여러 프로젝트가 동시에 보고하므로 식별 표기 없는 보고서 금지.
+
 ### 형식 (각 보고 = 3블록 + 타임스탬프)
 1. **📥 사용자 요구** — 원문 인용(`.quote`)
 2. **📤 Claude 결과보고** — 핵심 표·발견·검증 수치 + **✅ 사용자 검수 피드백**(받은 시각 포함)
 3. **산출물(PNG 등)** — **base64 임베드**(오프라인 자가완결)
 - **타임스탬프 필수**: 각 보고에 `YYYY-MM-DD HH:MM`(**시간 단위까지**). **검수 피드백에도 받은 시각** 기록.
+- **★프로젝트 식별 필수 (2026-06-11, P40에서 격상)**: 보고서 제목·사이드바·`<title>`에 **`P{N} · {프로젝트명}`** 명시(엔진 `session_report.py`의 `meta.project` 사용). 여러 프로젝트 동시 보고 시 구분용 — 검수 페이지에도 동일 적용(검수 규칙 2 참조).
 
 ### 검수 요청 + 피드백 누적 (한 쌍)
 - 누적 보고서 갱신과 **별개로 검수 요청(검수 페이지)도 함께 발송**(보고서=추적 / 검수 페이지=피드백 수집, 병행).
@@ -481,6 +488,8 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P37 | 한국어학 학업 (외국어로서의 한국어교육 — 해커스원격평생교육원) | `~/Library/Mobile Documents/com~apple~CloudDocs/한국어학/` | 1 |
 | P38 | 링고링크 플랫폼 (와가마마링크·우리링크·링고링크 3축 — KR↔JP 어학원 SaaS + 언어교환 SNS) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/prj.WW/` | 1 |
 | P39 | 전문직 숙련 시뮬레이션 플랫폼 (직업 골라 초심자→전문가; P36 엔진 기반 지식숙련 클러스터 + 물리학자 MVP; 방사선 B2B 트랙. 코드네임 Bible) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/Bible/` | 1 |
+| P40 | ProLingo (SeouLink 산하 전문분야 다언어 학습앱) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/ProLingo/` | 1 |
+| P41 | RetaiLink (커머스 — 덤핑/땡처리 재고 소싱 → 스마트스토어·쿠팡 재판매) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/RetaiLink/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
@@ -567,6 +576,32 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 - **시점**: 받는 즉시(주 작업 시작 전). 저장 후 경로를 사용자에게 한 줄 안내.
 - **연계**: 저장 자원의 위치·용도는 reference 메모리 또는 프로젝트 `.claude/CLAUDE.md`에 기록(압축 후에도 위치 추적 가능). 위 "압축 전 선제적 기록물 점검"과 한 쌍.
 
+### 지침 변경 자동 감지 + 행동규칙 기계 가드 (Instruction Hooks)
+
+> 도입: 2026-06-11 (P38 세션, 사용자 지시: "왜 자동으로 전역지침 내용 후크 안됐는지 검토해서 보완"). 원인: 지침은 **세션 시작 시 1회 스냅숏 로드**라 세션 도중 타 세션의 갱신이 자동 반영되지 않고, 행동 규칙(Safari 등)에 기계 강제 장치가 없었음.
+
+**전역 hooks(`~/.claude/settings.json`)가 자동 수행한다:**
+- **UserPromptSubmit** `~/.claude/hooks/claude_md_watch.py`: 매 사용자 메시지 제출 시 전역지침 + cwd→$HOME walk-up 경로의 모든 `.claude/CLAUDE.md` 변경(타 세션 갱신 포함)을 mtime/sha로 감지 → "재Read하라" + 변경 섹션 요약을 컨텍스트에 주입. **알림 수신 시 해당 파일을 Read로 다시 읽고 새 규칙 적용 의무.** (상태: `~/.claude/.cache/md_watch/{세션ID}.json`, 30일 자동 정리)
+- **PreToolUse(Bash)** `~/.claude/hooks/safari_guard.py`: `.html` 대상 `open` 명령에 `-a Safari`가 없으면 deny + 사유 반환 (HTML 산출물 Safari 규칙의 기계 이행).
+- **SessionStart** `~/.claude/hooks/session_start.sh`: 레지스트리 SSOT·4계층 번호에 더해 **자주 위반되는 행동규칙**(Safari·P{N} 표기·누적 보고서 섹션 재확인·검수 페이지·압축 포크 +1)을 주입 — 압축 후 재시작 시에도 발화하므로 규칙 유실 방지.
+- 새 "자주 위반 규칙"이 생기면: ① session_start.sh에 1줄 추가 ② 기계 차단 가능하면 PreToolUse 가드 스크립트 추가.
+
+### 대화 전문 자동 MD 미러 (Transcript MD Mirror)
+
+> 도입: 2026-06-11 (P41 세션, 사용자 지시: "압축으로 컨텍스트가 유실되지 않도록 주기적으로 모든 대화를 MD로 저장, 전 세션 전파")
+
+**전역 hooks가 자동 수행한다 (Claude의 별도 저장 작업 불필요):** `~/.claude/settings.json`의 **Stop(매 턴 종료, async) · PreCompact(압축 직전) · SessionEnd** 훅이 `~/.claude/scripts/transcript_to_md.py`를 실행해 현재 세션 transcript JSONL을 읽기 좋은 MD로 변환 저장한다.
+
+- **저장 위치 (2중 미러)**:
+  1. `{프로젝트}/memory/sessions/transcripts/{세션UUID}.md` — cwd에 `.claude/` 또는 `memory/`가 있을 때 (iCloud 동기화로 타 맥 복구 가능)
+  2. `~/.claude/transcripts_md/{프로젝트슬러그}/{세션UUID}.md` — 항상 (중앙 미러, cron 백업 대상)
+- **내용**: 사용자·Claude 발화 전문 + 도구 호출 1줄 요약(🔧) + 도구 결과 300자 미리보기(↩️) + 압축 요약(📦). 서브에이전트 사이드체인 제외. 매 실행마다 전체 덮어쓰기(원본은 JSONL이 보존).
+- **Claude 의무**:
+  1. **압축 복원·세션 재개 시** 세션지침과 함께 이 미러 MD를 참조해 유실 맥락(특히 사용자 원문 발화)을 복원
+  2. 훅 미작동 의심 시 수동 실행: `echo '{"transcript_path":"<JSONL경로>","cwd":"<프로젝트>"}' | python3 ~/.claude/scripts/transcript_to_md.py`
+  3. 이 미러는 기록물 5종(세션지침·프로젝트 CLAUDE.md·TRAP·메모리·registry)을 **대체하지 않는다** — 원시 대화 보존층일 뿐, 구조화 기록은 기존 규칙대로 유지
+- **전파**: user-level 설정이므로 모든 신규 세션에 자동 적용. 이미 실행 중인 다른 세션은 재시작 후 적용.
+
 ### 압축 감지 시 대응
 
 자동 컨텍스트 압축이 발생하면:
@@ -574,3 +609,4 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 2. 세션지침 즉시 갱신 + **포크번호 +1 자동 부여** (`P{N}.{C}.{F+1}.0`) — ⚠️ **채팅번호 건드리지 말 것** (타 채팅 충돌 방지 핵심)
 3. **`## 금지/확정 사항` 섹션을 가장 먼저 확인** — 이전 세션 금지/불가 사항 필수 전달
 4. **사용자에게 새 채팅을 열라고 안내하지 않는다** — 사용자는 같은 채팅에서 계속 작업
+5. 유실 의심 맥락은 **대화 전문 미러** `memory/sessions/transcripts/{세션UUID}.md`에서 원문 복원
