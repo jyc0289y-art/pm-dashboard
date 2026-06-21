@@ -115,4 +115,4 @@ const md = new MarkdownIt({ html: true, ... });
 
 | 대상 프로젝트 | 세션 | 날짜 | 버전 | 커스텀 |
 |--------------|------|------|------|--------|
-| (아직 없음) | — | — | — | — |
+| P42 (하루의 끝에서 / AWDm) | P42.1.1.0 | 2026-06-18 | 1.0.0 (엔진 재사용) | renderer.js 미복사 — `markdown-it` 엔진을 MarkLink `node_modules`에서 직접 호출(`AWDm/docs/report/md2html.js`)해 누적 HTML 보고서 ovDoc 오버레이의 .md를 생성 시점 사전 렌더링(오프라인 자가완결). |

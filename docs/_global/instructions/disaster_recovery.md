@@ -18,6 +18,16 @@
 3. `docs/RECOVERY.md` (clean Mac 복원 가이드)
 4. 정기 mirror 갱신 (수동 또는 cron)
 
+> ⚠️ **알려진 실패 유형 — 조용한 백업 중단 (2026-06-17 P31 발견·복구)**: 전역 자산 백업용 cron(`claude_sync_runner.sh`)이
+> **2026-03-28부터 ~2.5개월 silent failure**. 원인 = ① **cron 프로세스에 Full Disk Access 부재** →
+> iCloud Drive(`~/Library/Mobile Documents/`) 쓰기 시 `cp: Operation not permitted`(EPERM),
+> ② `set -euo pipefail` + 첫 대상 CLAUDE.md 실패 → 스크립트 전체 즉사(나머지 전부 미백업),
+> ③ `registries/`(P번호 SSOT)가 애초에 백업 대상에서 누락.
+> **해결 = 훅 기반 백업 전환**: `~/.claude/scripts/claude_home_backup.sh`(쓰기 probe + 실패 허용 집계 + registries 포함 + API 키 마스킹)를
+> Stop(30분 throttle)·SessionEnd 훅에서 실행. 훅은 앱 컨텍스트라 iCloud 쓰기 가능(실측 확인).
+> cron은 robust wrapper로 축소(FDA 있으면 보조, 없으면 probe에서 무해 종료). **헬스체크: `~/.claude/.cache/home_backup/status.txt`**.
+> **교훈**: 백업은 *성공 로그의 최신성*을 주기 점검할 것 — silent failure가 가장 위험. (cron 동작 가정 금지)
+
 ---
 
 ## 1. 미러 대상 (모든 프로젝트 공통)
@@ -165,3 +175,5 @@ curl -s -o /dev/null -w "%{http_code}\n" https://github.com/{owner}/{repo}  # 40
 | 날짜 | 세션 | 변경 |
 |------|------|------|
 | 2026-05-09 | P2.17.1.0 | 본 모듈 신규 작성. 사용자 명시 요청으로 모든 P 프로젝트 공통 패턴 정립. P2 기준 구현 완료 (mirror_user_claude.sh + RECOVERY.md + memory/_user_claude_mirror/) |
+| 2026-06-17 | P31 (HJ 정기검사 세션) | 전역 cron 백업이 2026-03-28부터 silent failure(FDA 부재 EPERM + set -e 즉사 + registries 누락)임을 발견·즉시 복구. 훅 기반 백업 `~/.claude/scripts/claude_home_backup.sh` 도입(Stop/SessionEnd), cron은 robust wrapper로 축소. 헬스체크 `~/.claude/.cache/home_backup/status.txt`. 「알려진 실패 유형」 콜아웃 추가 |
+| 2026-06-17 (재검토) | P31 | 충분성 재검토로 7개 잔존 격차 발견·5개 즉시 보완: `modules/`·`plans/`·**비-iCloud 프로젝트**(`~/developer/*`·`~/Dstream`의 .claude/CLAUDE.md+memory/sessions) 백업 대상 추가(146→201개), `session_start.sh`에 **silent-failure 알람**(마지막 성공>48h 경고) + 세션시작 백업(3번째 트리거) 추가. 미해결 2건 = **iCloud 외(GitHub) 이중화 미설정**(전역지침 GitHub 사본은 P2 미러뿐, stale), ICRPlink 원격 없음 |

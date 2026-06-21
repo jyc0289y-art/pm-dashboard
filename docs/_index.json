@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-15T03:03:17",
+  "last_updated": "2026-06-22T08:18:39",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1573,7 +1573,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-06-14 17:56",
+        "ts": "2026-06-22 08:18",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
@@ -1613,7 +1613,7 @@
         ]
       },
       {
-        "ts": "2026-05-09 16:45",
+        "ts": "2026-06-22 08:18",
         "title": "disaster_recovery",
         "file": "_global/instructions/disaster_recovery.md",
         "tags": [
@@ -1695,7 +1695,7 @@
         ]
       },
       {
-        "ts": "2026-04-15 10:28",
+        "ts": "2026-06-22 08:18",
         "title": "MOD-003 마크다운 렌더러",
         "file": "_global/modules/MOD-003_markdown_renderer.md",
         "tags": [

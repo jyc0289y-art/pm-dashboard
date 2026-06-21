@@ -490,6 +490,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P39 | 전문직 숙련 시뮬레이션 플랫폼 (직업 골라 초심자→전문가; P36 엔진 기반 지식숙련 클러스터 + 물리학자 MVP; 방사선 B2B 트랙. 코드네임 Bible) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/Bible/` | 1 |
 | P40 | ProLingo (SeouLink 산하 전문분야 다언어 학습앱) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/ProLingo/` | 1 |
 | P41 | RetaiLink (커머스 — 덤핑/땡처리 재고 소싱 → 스마트스토어·쿠팡 재판매) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/RetaiLink/` | 1 |
+| P42 | 하루의 끝에서 / 一日の終わりに (AWDm — 일본인 한국어 학습자 대상 저녁식사 브이로그 유튜브 채널; 설명 부제 「퇴근 후 저녁 / 仕事帰りの晩ごはん」; 제1화 김밥, 얼굴 미노출, 가타카나+음가한글+일본어 자막, 쇼츠 학습 분리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/AWDm/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
