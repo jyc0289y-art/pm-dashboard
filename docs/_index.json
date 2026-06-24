@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-24T03:02:43",
+  "last_updated": "2026-06-25T03:03:18",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1573,7 +1573,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-06-24 03:02",
+        "ts": "2026-06-25 03:03",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [

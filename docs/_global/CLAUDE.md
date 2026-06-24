@@ -323,6 +323,16 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 - Ollama v0.15.4 (localhost:11434)
 - Gemini CLI OAuth: jyc0289y@gmail.com
 
+## ⚡ Chrome 에너지 워치독 + 무거운 탭 정리 규칙 (2026-06-24, P43에서 도출)
+
+> 계기: AppSheet **편집기의 실시간 미리보기**가 코어 1개를 99% 점유해 밤새 배터리 드레인. 사용자 지시 "자리 비우면 자동 정리".
+
+**① 자동 워치독(설치됨)**: `~/.claude/scripts/chrome_idle_watchdog.sh` + launchd `com.jyc.chrome-idle-watchdog`(5분 주기). 게이트 **3개 모두 충족 시에만** 폭주 Chrome 렌더러 종료 — ⓐ사용자 미사용 ≥30분(HIDIdleTime) ⓑClaude 비활동 ≥20분(transcripts_md 최신 mtime, 긴 작업 턴 보호) ⓒ렌더러 CPU ≥60%. → **자리에 있거나 Claude 작업 중이면 절대 안 건드림.** 로그 `~/.claude/logs/chrome_watchdog.log`. 임계값은 스크립트 상단 변수. 관리: `launchctl list | grep chrome-idle-watchdog`.
+
+**② Claude 행동 규칙(필수)**:
+- **무거운 라이브 SPA(AppSheet 편집기·실시간 미리보기 등) 탭은 작업이 끝나면 즉시 닫는다.** 켜두면 미리보기가 계속 렌더+동기화로 CPU 폭주(앱을 *쓰는* 건 가벼우나 *편집기*는 무거움). ← 야간 자율작업 종료 시 특히.
+- 세션 시작/복귀 때 Chrome 에너지가 높거나 사용자가 호소하면: `ps -Ao pid,%cpu,comm | grep "Chrome Helper (Renderer)"`로 폭주 렌더러 확인 → 확장으로 해당 탭 정밀 종료(또는 렌더러 `kill -9`). 워치독은 자리 비움 중에만 동작 → **Claude 활동 중 정리는 Claude 몫**(둘이 한 쌍의 이중 안전망).
+
 ## 지침 체계
 
 | 레벨 | 파일 | 명칭 | 자동 로드 |
@@ -492,6 +502,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P41 | RetaiLink (커머스 — 덤핑/땡처리 재고 소싱 → 스마트스토어·쿠팡 재판매) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/RetaiLink/` | 1 |
 | P42 | 하루의 끝에서 / 一日の終わりに (AWDm — 일본인 한국어 학습자 대상 저녁식사 브이로그 유튜브 채널; 설명 부제 「퇴근 후 저녁 / 仕事帰りの晩ごはん」; 제1화 김밥, 얼굴 미노출, 가타카나+음가한글+일본어 자막, 쇼츠 학습 분리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/AWDm/` | 1 |
 | P43 | 호진 전사 업무 데이터 플랫폼 (HJGF — 호진산업기연 Flow→Google Workspace 전환 후 업무관리 재구축; Sheets SSOT + AppSheet + Apps Script; 전사 단일 플랫폼·중복입력 0 목표; P31 안전관리와 통합 검토 예정) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HJGF/` | 1 |
+| P44 | ARABICA (베트남 스페셜티 아라비카 생두 수입·도매 — 공급사 Han Vinh/TGROUP, Lam Dong; B2B 생두 도매; 친구가 농장 연결자·발의자; 산출물 2종분리: 친구공유 문서A·비공개 실사 문서B) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/ARABICA/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
