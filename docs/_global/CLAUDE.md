@@ -503,6 +503,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P42 | 하루의 끝에서 / 一日の終わりに (AWDm — 일본인 한국어 학습자 대상 저녁식사 브이로그 유튜브 채널; 설명 부제 「퇴근 후 저녁 / 仕事帰りの晩ごはん」; 제1화 김밥, 얼굴 미노출, 가타카나+음가한글+일본어 자막, 쇼츠 학습 분리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/AWDm/` | 1 |
 | P43 | 호진 전사 업무 데이터 플랫폼 (HJGF — 호진산업기연 Flow→Google Workspace 전환 후 업무관리 재구축; Sheets SSOT + AppSheet + Apps Script; 전사 단일 플랫폼·중복입력 0 목표; P31 안전관리와 통합 검토 예정) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HJGF/` | 1 |
 | P44 | ARABICA (베트남 스페셜티 아라비카 생두 수입·도매 — 공급사 Han Vinh/TGROUP, Lam Dong; B2B 생두 도매; 친구가 농장 연결자·발의자; 산출물 2종분리: 친구공유 문서A·비공개 실사 문서B) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/ARABICA/` | 1 |
+| P45 | System Management (SM — 시스템 관리·맥북 환경설정·개발환경 구축 통합 허브; 기존 P5 "홈/시스템관리" 역할 흡수; launchd/cron·백업동기화·dotfiles·`~/.claude/` 자산 정비) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/SM/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
