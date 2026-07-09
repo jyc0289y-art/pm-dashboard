@@ -505,6 +505,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P44 | ARABICA (베트남 스페셜티 아라비카 생두 수입·도매 — 공급사 Han Vinh/TGROUP, Lam Dong; B2B 생두 도매; 친구가 농장 연결자·발의자; 산출물 2종분리: 친구공유 문서A·비공개 실사 문서B) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/ARABICA/` | 1 |
 | P45 | System Management (SM — 시스템 관리·맥북 환경설정·개발환경 구축 통합 허브; 기존 P5 "홈/시스템관리" 역할 흡수; launchd/cron·백업동기화·dotfiles·`~/.claude/` 자산 정비) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/SM/` | 1 |
 | P46 | DantaLink (단타 발굴 — SeouLink 산하 행동재무 기반; 2방법론: 뉴스이벤트 음운/카테고리 매칭 + Squeeze Breakout 기술적 압축·돌파; Python 백엔드 검증 → React Native 앱 목표; 원격 github.com/jyc0289y-art/dantalink PUBLIC) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/DantaLink/` | 1 |
+| P47 | DesktopCT (SeouLink 저에너지 신고형 데스크탑 CT — 종자·곤충 소형 저밀도 시료 μCT; 치과 60kV X선원+RVG CMOS 상용부품 조립; 원안법 신고사용+완전방호 자체차폐; 설계승인 명의=규제 해자; 브랜드 미정 MediLink/ScanLink 후보) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/DesktopCT/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
