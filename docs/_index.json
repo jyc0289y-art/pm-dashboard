@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-11T03:02:39",
+  "last_updated": "2026-07-12T03:02:47",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1573,7 +1573,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-07-10 03:02",
+        "ts": "2026-07-12 03:02",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
@@ -1624,6 +1624,14 @@
         "ts": "2026-04-15 10:28",
         "title": "세션 정리 가이드",
         "file": "_global/instructions/fork_cleanup_guide.md",
+        "tags": [
+          "지침모듈"
+        ]
+      },
+      {
+        "ts": "2026-07-12 03:02",
+        "title": "panel_discussion",
+        "file": "_global/instructions/panel_discussion.md",
         "tags": [
           "지침모듈"
         ]
