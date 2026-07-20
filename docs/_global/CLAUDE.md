@@ -524,7 +524,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P25 | TEREV (기술혁명 연대기 — 콘텐츠 기획) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/TEREV/` | 1 |
 | P26 | MOAT / 大思惟齋 (장기 사유·학습·연구 대화 아카이브) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/MOAT/` | 1 |
 | P27 | CardioLink (심혈관 모니터링 — 지속 ECG + 1인가구 안전망) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/CardioLink/` | 1 |
-| P28 | HornetLink (장기체공 Tailsitter 드론 — 군·관급 기술의 민간 민주화) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HornetLink/` | 1 |
+| P28 | HornetLink (장기체공 Tailsitter 드론) — 🧊 **잠정폐기 (2026-07-19 오너 결정, P49 중심 전환)**: 동결·기록 보존, 신규 세션 금지, 복원=오너 지시+SHARED 원장 회귀 확인 | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HornetLink/` | 1 |
 | P29 | AutoLink (업무 자동화 + 웹 대시보드 서비스) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/AutoLink/` | 1 |
 | P30 | SeouLink Game (한국어교실 비주얼노벨 게임화) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/SeouLink_Game/` | 1 |
 | P31 | HJ Safety Sheet 개선 (호진산업기연 안전관리현황통합파일 데이터 구조 혁신) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HJ/` | 1 |
@@ -545,7 +545,7 @@ SL Corporation / SeouLink (SL) — 여행, 어학, 교류 서비스.
 | P46 | DantaLink (단타 발굴 — SeouLink 산하 행동재무 기반; 2방법론: 뉴스이벤트 음운/카테고리 매칭 + Squeeze Breakout 기술적 압축·돌파; Python 백엔드 검증 → React Native 앱 목표; 원격 github.com/jyc0289y-art/dantalink PUBLIC) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/DantaLink/` | 1 |
 | P47 | DesktopCT (SeouLink 저에너지 신고형 데스크탑 CT — 종자·곤충 소형 저밀도 시료 μCT; 치과 60kV X선원+RVG CMOS 상용부품 조립; 원안법 신고사용+완전방호 자체차폐; 설계승인 명의=규제 해자; 브랜드 미정 MediLink/ScanLink 후보) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/DesktopCT/` | 1 |
 | P48 | 3DLink Neo (Onshape형 멀티플랫폼 파라메트릭 CAD — macOS/iPadOS/iOS 동시 출시; SolidWorks 사용자 마이그레이션 타깃; OCCT B-rep 커널+PlaneGCS 스케치 솔버 P14 자산 상속; P2 GEANT4 등 타 프로젝트 3D 에셋 공급 파이프라인 STEP/STL/GDML; 코드 루트 `~/developer/3DLinkNeo` 비-iCloud 빌드) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/3DLink_Neo/` | 1 |
-| P49 | HornetLink-TriVec (잠정명 — 트라이-틸트 분산추진 V-미익 VTOL 신기체: 윙 틸트업 2발 + 테일 F-35B식 틸트다운 1발, 순항 3발 전부 분산추진; ⚠️P28과 **폴더 공유**, P49 전용 서브트리 `p49-trivec/`; 세션 판별=주제가 트라이-틸트/TriVec이면 P49, tailsitter C1이면 P28) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HornetLink/` | 1 |
+| P49 | **TriVec(트라이벡)** — 트라이-틸트 분산추진 V-미익 VTOL (윙 틸트업 2발 + 테일 F-35B식 틸트다운 1발, 순항 3발 분산추진; **HornetLink 프로그램 중심 프로젝트** — P28은 잠정폐기 2026-07-19; 폴더 공유, 전용 서브트리 `p49-trivec/`, 이 폴더 새 세션 기본=P49) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/HornetLink/` | 1 |
 | PM | PM (프로젝트 관리) | `~/Library/Mobile Documents/com~apple~CloudDocs/developer/` | — |
 
 #### 정책 태그 (폐지, 2026-04-15)
