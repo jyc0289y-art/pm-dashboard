@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-22T09:43:37",
+  "last_updated": "2026-07-23T11:12:49",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1573,7 +1573,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-07-21 03:02",
+        "ts": "2026-07-23 11:12",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
@@ -1589,7 +1589,7 @@
         ]
       },
       {
-        "ts": "2026-07-20 04:41",
+        "ts": "2026-07-23 11:12",
         "title": "자율개발모드 규칙",
         "file": "_global/instructions/autonomous_dev.md",
         "tags": [
