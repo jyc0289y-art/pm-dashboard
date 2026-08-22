@@ -165,3 +165,12 @@ function loadCsvFromDrive() {
 ## 메모리에서 빠르게 참조할 키워드
 
 `clasp`, `Apps Script`, `Google Sheets 자동화`, `구글 시트 코드`, `Spreadsheet onOpen`, `PropertiesService 멱등`, `manifest oauthScopes`.
+
+## GAS 함정 4종 (P10 실증, 2026-08-20 — 상세: P10 `docs/production_lessons.md` TRAP-018)
+
+| # | 함정 | 예방 |
+|---|------|------|
+| 1 | **HtmlService 는 서빙 시 HTML 주석을 제거** | 주석을 구분자·마커로 쓰지 말 것. 구조가 필요한 텍스트는 `.gs` 에 JS 문자열로 내장 |
+| 2 | **onOpen = 단순 트리거** — 권한 필요 호출(시트 쓰기·PropertiesService) 즉시 거부 | onOpen 은 메뉴 생성만. 초기화·마이그레이션은 메뉴 클릭 이후로 (본 문서의 «onOpen 1회용 자동 실행» 패턴은 **승인이 끝난 스크립트 전제** — 신규 스크립트에 쓰면 PERMISSION_DENIED) |
+| 3 | **다중 계정 로그인 → 대화상자의 google.script.run 통째 차단** ("스토리지에서 읽는 중 PERMISSION_DENIED") | 화면을 열 때 서버가 데이터를 실어 보내고(첫 화면 서버 호출 0회), 저장·생성은 화면 자체 폴백. 확정 진단 = 시크릿 창 재시험 |
+| 4 | **getService().getUrl() 이 엉뚱한 배포를 가리킬 수 있음** + 워크스페이스는 `/a/macros/{도메인}/s/…` 형식만 열림 | 배포 ID 를 빌드 시 코드에 주입해 주소를 직접 조립. `clasp push` 만으로는 웹앱 미갱신 — push+`update-deployment` 를 스크립트로 묶을 것 |

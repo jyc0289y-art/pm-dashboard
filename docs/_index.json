@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-19T11:21:41",
+  "last_updated": "2026-08-22T20:11:35",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -53,6 +53,12 @@
       "desc": "Ludlum 3030-2 커스텀 로깅 S/W",
       "status": "active",
       "docs": [
+        {
+          "ts": "2026-08-22 20:11",
+          "title": "20260819 155326 ZKI 20260811 누설검사 전수검증 및 계산과정",
+          "file": "P10_Hodlum/20260819_155326_ZKI_20260811_누설검사_전수검증_및_계산과정.md",
+          "tags": []
+        },
         {
           "ts": "2026-04-15 10:03",
           "title": "20260318 153000 WO-001 Ludlum 3030-2 커스텀 로깅 소프트웨어 작업지시서",
@@ -1573,7 +1579,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-08-17 14:04",
+        "ts": "2026-08-22 20:11",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
@@ -1605,7 +1611,7 @@
         ]
       },
       {
-        "ts": "2026-05-14 03:03",
+        "ts": "2026-08-22 20:11",
         "title": "clasp_workflow",
         "file": "_global/instructions/clasp_workflow.md",
         "tags": [
@@ -2135,7 +2141,7 @@
             ]
           },
           {
-            "ts": "2026-03-19 10:09",
+            "ts": "2026-08-22 20:11",
             "title": "P10 Hodlum 프로젝트지침 (CLAUDE.md)",
             "file": "_sessions/P10_Hodlum/CLAUDE.md",
             "tags": [
