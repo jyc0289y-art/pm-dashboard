@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-22T20:11:35",
+  "last_updated": "2026-08-25T19:52:14",
   "projects": [
     {
       "id": "P06_DLTrading",
@@ -1579,7 +1579,7 @@
   "instructions": {
     "global": [
       {
-        "ts": "2026-08-22 20:11",
+        "ts": "2026-08-25 19:52",
         "title": "전역 지침 (CLAUDE.md)",
         "file": "_global/CLAUDE.md",
         "tags": [
@@ -1691,7 +1691,7 @@
         ]
       },
       {
-        "ts": "2026-04-15 10:28",
+        "ts": "2026-08-25 19:52",
         "title": "Worker LLM 규칙",
         "file": "_global/instructions/worker_rules.md",
         "tags": [
